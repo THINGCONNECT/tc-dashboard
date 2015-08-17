@@ -7,7 +7,7 @@ var Sim = mongoose.model('Sim');
 var amqp = require('amqp');
 
 if(!(nconf.get('AMQP_URL') && nconf.get('AMQP_LOGIN') && nconf.get('AMQP_PASSWORD') && nconf.get('AMQP_VHOST'))){
-  console.log("AMQP Credentials not found"):
+  console.log("AMQP Credentials not found");
   return;
 }
 
