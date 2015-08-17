@@ -31,6 +31,10 @@ node_modules
 # ignore local database used for dev
 database
 
+# ignore environment variables
+server/config/development.json
+server/config/production.json
+
 # ignore builds
 build
 dist
