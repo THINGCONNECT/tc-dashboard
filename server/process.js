@@ -1,4 +1,4 @@
-var http = require('http');
+var nconf = require('nconf');
 
 var mongoose = require('mongoose');
 require('./models/Sim');
@@ -7,14 +7,14 @@ var Sim = mongoose.model('Sim');
 var amqp = require('amqp');
 
 var queue = "message_queue";
-
+return;
 var connection = amqp.createConnection(
   {
-    host: process.env.AMQP_URL,
+    host: nconf.get('AMQP_URL'),
     //port: 5672,
-    login: process.env.AMQP_LOGIN,
-    password: process.env.AMQP_PASSWORD,
-    vhost: process.env.AMQP_VHOST,
+    login: nconf.get('AMQP_LOGIN'),
+    password: nconf.get('AMQP_PASSWORD'),
+    vhost: nconf.get('AMQP_VHOST'),
     // connectionTimeout: 10000,
     // authMechanism: 'AMQPLAIN',
     // noDelay: true,

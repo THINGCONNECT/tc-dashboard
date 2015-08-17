@@ -15,8 +15,6 @@ var http = require('http');
 var nconf = require('nconf');
 var mongoose = require('mongoose');
 
-// Run process
-// require('./process');
 // Define global constants
 require('./global');
 
@@ -119,3 +117,6 @@ var server = app.listen(process.env.PORT || 3000, function() {
 	var port = server.address().port;
 	console.log('Server listening at http://%s:%s', host, port);
 });
+
+// Run process
+require('./process');

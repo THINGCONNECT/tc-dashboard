@@ -12,7 +12,6 @@ var urlObj = url.parse("http://beepboop.herokuapp.com/");
 
 router.get('/', function(req, res) {
   var user = req.user;
-  console.log(user);
   Sim.find({owner: user}, function(err, sims) {
     if(err || !sims){
       console.log("Message Processing Error", err, sims);
