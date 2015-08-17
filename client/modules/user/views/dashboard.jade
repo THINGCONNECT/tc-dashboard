@@ -1,0 +1,15 @@
+include ../partials/sidebar.jade
+
+div.dashboard-wrapper
+  include ../partials/dashboard-header.jade
+  div.dashboard-content
+
+    div.featured-widgetsul
+      div(class="widget column-4" ng-repeat="d in UserState.devices")
+        div.widget-inner
+
+          h1 {{d.name}}
+          md-content
+            inject-d(ng-init="payload = d.payload" d="d")
+      
+  

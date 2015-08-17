@@ -1,0 +1,115 @@
+include ../partials/sidebar.jade
+
+div.dashboard-wrapper
+  include ../partials/dashboard-header.jade
+  div.dashboard-content
+    div.device-form
+      div.device-inner
+        h1 Editing
+        h2 {{device.name}}
+        form(ng-submit="updateDevice($event)")
+          label device name
+          input(type="text" placeholder="Bathroom Sensor" ng-model="device.name")
+          label device key
+          input(type="text" placeholder="Device Key" disabled ng-model="device._id")
+          label read payload URL
+          input(type="text" placeholder="Read Payload URL" disabled ng-model="device.endpointUrl")
+          label write payload URL
+          input(type="text" placeholder="Write Payload URL" disabled ng-model="device.payloadUrl")
+          label Template
+          textarea(placeholder="Default Template" ng-model="device.template")
+          div.api
+            h2 APIs
+            br
+            p.info connect APIs with your device
+            br
+            div.column-11
+              select(name="" ng-model="api")
+                option(value="") Custom API
+                option(value="twilio") Twilio
+                option(value="twitter") Twitter
+                option(value="sendgrid") SendGrid
+            div.column-1
+              a(href="" class="add-filter lrg" ng-click="addNewApi(api)") 
+                i.fa.fa-plus-circle
+
+            div(ng-repeat="a in device.API" ng-switch="a.name")
+              div.api-item(ng-switch-when="twilio")
+                h2 Twilio
+                  a(href="" ng-click="removeApi($index)")
+                    i.fa.fa-minus-circle
+                label SID
+                input(type="text" placeholder="SID" ng-model="a.creds.sid")
+                label Auth token
+                input(type="text" placeholder="Auth token" ng-model="a.creds.authToken")
+                label twilio phone number
+                input(type="tel" placeholder="Send Text From" ng-model="a.details.from")
+                label phone number to
+                input(type="tel" placeholder="Send Text To" ng-model="a.details.to")
+                label message
+                textarea(placeholder="Message" ng-model="a.details.body")
+              div.api-item(ng-switch-when="twitter")
+                h2 Twitter
+                    a(href="" ng-click="removeApi($index)")
+                      i.fa.fa-minus-circle
+                  label Consumer Key
+                  input(type="text" placeholder="Consumer Key" ng-model="a.creds.consumer_key")
+                  label Consumer Secret
+                  input(type="text" placeholder="Send Email To" ng-model="a.creds.consumer_secret")
+                  label Access Token Key
+                  input(type="text" placeholder="Send Email From" ng-model="a.creds.access_token_key")
+                  label Access Token Secret
+                  input(type="text" placeholder="Subject" ng-model="a.creds.access_token_secret")
+                  label Tweet
+                  textarea(placeholder="Tweet" ng-model="a.details.tweet")
+              div.api-item(ng-switch-when="sendgrid")
+                h2 SendGrid
+                  a(href="" ng-click="removeApi($index)")
+                    i.fa.fa-minus-circle
+                label API Key
+                input(type="text" placeholder="API Key" ng-model="a.creds.key")
+                label To
+                input(type="text" placeholder="Send Email To" ng-model="a.details.to")
+                label From
+                input(type="text" placeholder="Send Email From" ng-model="a.details.from")
+                label Subject
+                input(type="text" placeholder="Subject" ng-model="a.details.subject")
+                label Body
+                textarea(placeholder="Message" ng-model="a.details.body")
+            
+
+          //- div.filters
+            h2 filters
+              a(href="" class="add-filter") 
+                i.fa.fa-plus-circle
+            br
+            p.info create conditions for your widget to function. example: if LIGHT = ON
+            div.filter-item
+              h2 filter 1
+                a(href="")
+                  i.fa.fa-minus-circle
+              div.column-4
+                label variable
+                input(type="text" placeholder="Var")
+              div.column-4
+                label operator
+                select(name="")
+                  option >
+                  option <
+                  option >=
+                  option <=
+                  option =
+              div.column-4
+                label variable
+                input(type="text" placeholder="Var")
+          label.center
+            input(type="checkbox" checked ng-model="checked") 
+            | &nbsp; public?
+          div(ng-hide="!checked")
+            label.clear add description
+            input(type="text" placeholder="Description")
+          
+          input(type="submit" class="btn btn-purple" value="Save")
+          
+          p.info Removing this device will delete any widgets created within it.
+          a(class="btn block btn-small btn-remove" ng-click="removeDevice()") Remove Device
