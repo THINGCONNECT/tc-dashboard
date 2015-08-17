@@ -4,7 +4,7 @@ var shortid = require('shortid');
 
 var SimSchema = new Schema({
   simId:        {type: String, required: true, unique: true},
-  // apiKey:       {type: String, unique: true},
+  callbackUrl:  {type: String},
 
   owner:        {type: Schema.Types.ObjectId, ref: 'User'},
   dateCreated:  {type: Date, default: Date.now},
