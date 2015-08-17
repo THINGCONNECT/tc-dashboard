@@ -31,16 +31,25 @@ VerifySchema.statics.createVerification = function(simId, user, callback) {
             verification.verifyCode = verificationCode;
           }
           verification.save(function(err, res){
-            callback(err, verification);
+            if(!err){
+              return callback(null, verification);
+            }else{
+              console.log(err);
+              return callback("Something went wrong", null);
+            }
           });
         }else{
           console.log(err);
-          callback(err, null);
+          return callback("Something went wrong", null);
         }
       });
     }else{
-      console.log(err, sim);
-      callback(true, null);
+      if(sim && !sim.verified){
+        callback("This card is already verified", null);
+      }else{
+        console.log(err);
+        callback("Something went wrong", null);
+      }
     }
   });
 };

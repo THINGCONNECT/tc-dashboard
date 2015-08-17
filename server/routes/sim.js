@@ -56,8 +56,8 @@ router.get('/verify/:sim', function(req, res) {
       console.log("Verification Created ", verification.verifyCode);
       return res.ok({verifyCode: verification.verifyCode});
     } else {
-      // console.log("Verification not created");
-      return res.err(500, "Verification not created");
+      console.log("Verification not created", simId);
+      return res.err(500, err);
     }
   });
 
