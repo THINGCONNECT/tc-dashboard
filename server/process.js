@@ -6,8 +6,11 @@ var Sim = mongoose.model('Sim');
 
 var amqp = require('amqp');
 
-var queue = "message_queue";
-return;
+if(!(nconf.get('AMQP_URL') && nconf.get('AMQP_LOGIN') && nconf.get('AMQP_PASSWORD') && nconf.get('AMQP_VHOST'))){
+  console.log("AMQP Credentials not found"):
+  return;
+}
+
 var connection = amqp.createConnection(
   {
     host: nconf.get('AMQP_URL'),
@@ -28,7 +31,7 @@ console.log("Connecting");
 
 connection.on('ready', function () {
   console.log("Connected ", connection.state);
-  connection.queue(queue, {passive:true, durable: true}, function (q) {
+  connection.queue(nconf.get('AMQP_QUEUE'), {passive:true, durable: true}, function (q) {
     console.log("Queue");
     q.subscribe(function (message, headers, deliveryInfo, messageObject) {
       // Print messages to stdout
