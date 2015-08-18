@@ -12,7 +12,7 @@ module.service('UserState', function($state, $stateParams, $q, $rootScope, $http
      * @param {UserState}
      */
     function UserState() {
-      this.devices = [];
+      this.sim = [];
       $http.get("/api/users/keys")
         .then(function(data) {
           $rootScope.maxKeys = data.data;
@@ -33,17 +33,17 @@ module.service('UserState', function($state, $stateParams, $q, $rootScope, $http
     });
 
     prototype.copyOverDevice = function(device) {
-      var found = this.devices.map(function(d) {
+      var found = this.sim.map(function(d) {
         return d._id;
       }).indexOf(device._id);
 
       if(found > -1) {
-        this.devices[found] = device;
+        this.sim[found] = device;
       }
     }
 
     prototype.getDevice = function() {
-      return this.devices.filter(function(d) {
+      return this.sim.filter(function(d) {
           return d._id == $stateParams.id;
         })[0];
     };
@@ -53,29 +53,29 @@ module.service('UserState', function($state, $stateParams, $q, $rootScope, $http
     }
 
     prototype.addNewDevice = function(device) {
-      this.devices.push(device);
+      this.sim.push(device);
     };
 
     prototype.removeDevice = function(device) {
 
       var found = -1;
-      for (var i = 0; i < this.devices.length; i++) {
-        if(this.devices[i]._id == device._id) {
+      for (var i = 0; i < this.sim.length; i++) {
+        if(this.sim[i]._id == device._id) {
           found = i;
           break;
         }
       };
 
       if(found > -1) {
-        this.devices.splice(found, 1);
+        this.sim.splice(found, 1);
       }
       $state.go('dashboard');
     };
 
     prototype.reset = function() {
-      this.devices = [];
+      this.sim = [];
       this._user = null;
-      this.devicesLoaded = false;
+      this.simLoaded = false;
     };
 
     prototype.logout = function() {
@@ -100,7 +100,7 @@ module.service('UserState', function($state, $stateParams, $q, $rootScope, $http
 
     // switch(toName) {
     //   case 'edit-device':
-    //     UserState.device = UserState.devices.filter(function(d) {
+    //     UserState.device = UserState.sim.filter(function(d) {
     //       return d._id == toParams.id;
     //     })[0];
     //     break;

@@ -1,56 +1,57 @@
 var module = require('./module');
-module.service('Device', function($http, UserState, $q, $compile, $sce) {
-  var Device = (function() {
-    Device.displayName = 'Device';
-    var prototype = Device.prototype, constructor = Device;
+module.service('Sim', function($http, UserState, $q, $compile, $sce) {
+  var Sim = (function() {
+    Sim.displayName = 'Sim';
+    var prototype = Sim.prototype, constructor = Sim;
   
     /**
      * Constructor
-     * @param {Device}
+     * @param {Sim}
      */
-    function Device(_device) {
-      for(var k in _device) {
-        this[k] = _device[k];
+    function Sim(_sim) {
+      for(var k in _sim) {
+        this[k] = _sim[k];
         if(k == 'writeKey') {
-          this.payloadUrl = window.location.protocol + '//' + window.location.hostname + '/api/devices/' + _device._id + '/payload?write=' + this[k] + '&payload=Hello%20World';
+          this.payloadUrl = window.location.protocol + '//' + window.location.hostname + '/api/sims/' + _sim._id + '/payload?write=' + this[k] + '&payload=Hello%20World';
         }
         if(k == 'readKey') {
-          this.endpointUrl = window.location.protocol + '//' + window.location.hostname + '/api/devices/' + _device._id + '/payload?read=' + this[k];
+          this.endpointUrl = window.location.protocol + '//' + window.location.hostname + '/api/sims/' + _sim._id + '/payload?read=' + this[k];
         }
 
       }
 
-      // if(!(_device instanceof Device)) {
+      // if(!(_sim instanceof Sim)) {
       //   this.template = $sce.trustAsHtml(this.template);
       // }
     }
 
-    var b = '/api/devices/';
+    var b = '/api/sim/';
 
-    Device.newDevice = function(props) {
+    Sim.newSim = function(props) {
       return $http.post(b, props)
         .then(function(data) {
-          var device = new Device(data.data);
-          UserState.addNewDevice(device);
-          return device;
+          var sim = new Sim(data.data);
+          UserState.addNewSim(sim);
+          return sim;
         });
     };
 
-    Device.loadDevices = function() {
-      if(UserState.devicesLoaded) return $q.when(UserState.devices);
-      UserState.devicesLoaded = true;
+    Sim.loadSims = function() {
+      if(UserState.simsLoaded) return $q.when(UserState.sims);
+      UserState.simsLoaded = true;
       return $http.get(b)
         .then(function(data) {
-          var devices = data.data;
-          devices = devices.map(function(d) {
-            var rtn = new Device(d);
-            UserState.addNewDevice(rtn);
+          var sims = data.data;
+          console.log(sims);
+          sims = sims.map(function(d) {
+            var rtn = new Sim(d);
+            // UserState.addNewSim(rtn);
             return rtn;
           });
-          return devices;
+          return sims;
         })
         .catch(function() {
-          UserState.devicesLoaded = false;
+          UserState.simsLoaded = false;
         });
     };
 
@@ -65,12 +66,12 @@ module.service('Device', function($http, UserState, $q, $compile, $sce) {
       var self = this;
       return $http.delete(b + this._id)
         .then(function() {
-          UserState.removeDevice(self);
+          UserState.removeSim(self);
           return self;
         });
     };
 
-    return Device;
+    return Sim;
   })();
-  return Device;
+  return Sim;
 });
