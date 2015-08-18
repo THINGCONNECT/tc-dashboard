@@ -6,6 +6,6 @@ div.dashboard-wrapper
     div(ng-hide='hideForm')
       h1 Connect new sim
       input(type="text" placeholder="Sim Number" ng-model="sim.simId")
-      input(type="submit" ng-click="verifySim()" class="btn btn-purple" value="Connect")
+      input(type="submit" ng-click="verifySim($event)" class="btn btn-purple" value="Connect")
     div(ng-show='hideForm')
       | Please send {{verifyCode}} using your SIM card
