@@ -3,10 +3,7 @@ include ../partials/sidebar.jade
 div.dashboard-wrapper
   include ../partials/dashboard-header.jade
   div.dashboard-content
-    div.device-form
-      div.device-inner
-        h1 connect new device
-        form(ng-submit="newDevice()")
-          input(type="text" placeholder="Device Name" ng-model="device.name")
-          textarea(placeholder="Default Template" ng-model="device.template")
-          input(type="submit" class="btn btn-purple" value="Connect")
+    h1 connect new sim
+    form(ng-submit="newSim()")
+      input(type="text" placeholder="Sim Number" ng-model="sim.simId")
+      input(type="submit" class="btn btn-purple" value="Connect")

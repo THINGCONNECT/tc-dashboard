@@ -8,8 +8,6 @@ var https = require('https');
 
 var url = require('url');
 
-var urlObj = url.parse("http://beepboop.herokuapp.com/");
-
 router.get('/', function(req, res) {
   var user = req.user;
   Sim.find({owner: user}, function(err, sims) {
@@ -20,6 +18,24 @@ router.get('/', function(req, res) {
       res.ok(sims);
     }
   });
+});
+
+router.post('/verify', function(req, res) {
+  console.log("hatin!!");
+  var body = req.body;
+  var simId = body.simId;
+  var user = req.user;
+  console.log("hatin ",body);
+  Verify.createVerification(simId, user, function(err, verification){
+    if(!err){
+      console.log("Verification Created ", verification.verifyCode);
+      return res.ok({verifyCode: verification.verifyCode});
+    } else {
+      console.log("Verification not created", simId);
+      return res.err(500, err);
+    }
+  });
+
 });
 
 //Update sim info
@@ -43,23 +59,6 @@ router.post('/:sim', function(req, res) {
       return res.error(500);
     }
   });
-});
-
-router.get('/verify/:sim', function(req, res) {
-  var body = req.body;
-  var simId = req.params.sim;//body.sim;
-  var user = req.user;
-  
-  Verify.createVerification(simId, user, function(err, verification){
-    if(!err){
-      console.log("Verification Created ", verification.verifyCode);
-      return res.ok({verifyCode: verification.verifyCode});
-    } else {
-      console.log("Verification not created", simId);
-      return res.err(500, err);
-    }
-  });
-
 });
 
 router.get('/test/:sim/:payload', function(req, res) {

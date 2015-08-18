@@ -17,12 +17,12 @@ module.service('Sim', function($http, $q, $compile, $sce) {
     var baseUrl = '/api/sim/';
 
     Sim.newSim = function(props) {
-      return $http.post(baseUrl, props)
-        .then(function(data) {
-          var sim = new Sim(data.data);
-          UserState.addNewSim(sim);
-          return sim;
-        });
+      return $http.post(baseUrl + '/verify', props).then(function(data) {
+        console.log(data);
+        // var sim = new Sim(data.data);
+        // //UserState.addNewSim(sim);
+        return data.data;
+      });
     };
 
     Sim.loadSims = function() {
