@@ -44,7 +44,7 @@ VerifySchema.statics.createVerification = function(simId, user, callback) {
         }
       });
     }else{
-      if(sim && !sim.verified){
+      if(sim && sim.verified){
         callback("This card is already verified", null);
       }else{
         console.log(err);

@@ -21,11 +21,10 @@ router.get('/', function(req, res) {
 });
 
 router.post('/verify', function(req, res) {
-  console.log("hatin!!");
   var body = req.body;
   var simId = body.simId;
   var user = req.user;
-  console.log("hatin ",body);
+  
   Verify.createVerification(simId, user, function(err, verification){
     if(!err){
       console.log("Verification Created ", verification.verifyCode);

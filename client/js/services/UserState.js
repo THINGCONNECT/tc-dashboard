@@ -16,15 +16,21 @@ module.service('UserState', function($q, User, Sim) {
       this.user;
     }
 
+    prototype.loadSims = function(){
+      var self = this;
+      return Sim.loadSims().then(function(sims){
+        console.log("SIMS LOADED", sims);
+        self.sims = sims;
+        return sims;
+      })
+    }
+
     prototype.handleUserLogin = function(q){
       var self = this;
       return q.then(function(user){
         self.user = user;
         console.log("set user ", self);
-        Sim.loadSims().then(function(sims){
-          console.log("SIMS LOADED", sims);
-          self.sims = sims;
-        })
+        self.loadSims();
 
         return self.user;
       }).catch(function(e){
