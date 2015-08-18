@@ -17,6 +17,6 @@ module.config(function($stateProvider) {
   /**
    * Define states here
    */
-  loadStates($stateProvider, require('./states/SampleStates'));
+  loadStates($stateProvider, require('./states/DefaultStates'));
   loadStates($stateProvider, require('./states/UserStates'));
 });

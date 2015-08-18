@@ -1,6 +1,6 @@
 // modify folders in client/modules directory
-// sample directory for this prefix would be client/modules/sample/
-var modulePrefix = '/modules/sample/';
+// default directory for this prefix would be client/modules/default/
+var modulePrefix = '/modules/default/';
 var viewsPrefix = modulePrefix + 'views/';
 var partialsPrefix = modulePrefix + 'partials/';
 
@@ -16,21 +16,6 @@ module.exports = [
         content: {
           templateUrl: viewsPrefix + 'home.html',
           // controller: 'SampleCtrl',
-        },
-      }
-    }
-  },
-  {
-    name: 'marketplace',
-    state: {
-      url: '/marketplace',
-      views: {
-        header: {
-          templateUrl: partialsPrefix + 'header.html',
-        },
-        content: {
-          templateUrl: viewsPrefix + 'marketplace.html',
-          // controller: 'SplashCtrl',
         },
       }
     }

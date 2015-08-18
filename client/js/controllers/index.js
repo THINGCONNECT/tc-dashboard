@@ -5,9 +5,6 @@ require('./module');
  */
 
  require('./LoginCtrl');
- require('./NewDeviceCtrl');
  require('./DashboardCtrl');
- require('./EditDeviceCtrl');
- require('./BuyKeyCtrl');
-require('./SingleWidgetCtrl');
-require('./DemoCtrl');
+ require('./NewSimCtrl');
+ require('./EditSimCtrl');

@@ -21,108 +21,33 @@ module.exports = [
     }
   },
   {
-    name: 'new-device',
+    name: 'new-sim',
     state: {
-      url: '/new-device',
+      url: '/new-sim',
       views: {
         // sidebar: {
         //   templateUrl: partialsPrefix + 'sidebar.html',
         // },
         content: {
-          templateUrl: viewsPrefix + 'new-device.html',
-          controller: 'NewDeviceCtrl',
+          templateUrl: viewsPrefix + 'new-sim.html',
+          controller: 'NewSimCtrl',
         },
       }
     }
   },
   {
-    name: 'buy-key',
+    name: 'edit-sim',
     state: {
-      url: '/buy-key',
+      url: '/edit-sim/:id',
       views: {
         // sidebar: {
         //   templateUrl: partialsPrefix + 'sidebar.html',
         // },
         content: {
-          templateUrl: viewsPrefix + 'buy-key.html',
-          controller: 'BuyKeyCtrl',
+          templateUrl: viewsPrefix + 'edit-sim.html',
+          controller: 'EditSimCtrl'
         },
       }
     }
   },
-  {
-    name: 'buy-thanks',
-    state: {
-      url: '/buy-thanks',
-      views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
-        content: {
-          templateUrl: viewsPrefix + 'buy-thanks.html',
-          controller: 'BuyKeyCtrl',
-        },
-      }
-    }
-  },
-  {
-    name: 'edit-device',
-    state: {
-      url: '/edit-device/:id',
-      views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
-        content: {
-          templateUrl: viewsPrefix + 'edit-device.html',
-          controller: 'EditDeviceCtrl'
-        },
-      }
-    }
-  },
-  {
-    name: 'edit-widget',
-    state: {
-      url: '/edit-widget',
-      views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
-        content: {
-          templateUrl: viewsPrefix + 'edit-widget.html',
-          // controller: 'LoginCtrl',
-        },
-      }
-    }
-  },
-
-  {
-    name: 'single-widget',
-    state: {
-      url: '/widget/:id',
-      views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
-        content: {
-          templateUrl: viewsPrefix + 'single-widget.html',
-          controller: 'SingleWidgetCtrl',
-        },
-      }
-    }
-  },
-
-
-  {
-    name: 'demo',
-    state: {
-      url: '/demo',
-      views: {
-        content: {
-          templateUrl: viewsPrefix + 'demo.html',
-          controller: 'DemoCtrl',
-        },
-      }
-    }
-  }
 ]

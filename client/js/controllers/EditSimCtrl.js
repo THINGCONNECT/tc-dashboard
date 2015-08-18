@@ -1,5 +1,5 @@
 var module = require('./module');
-module.controller('EditDeviceCtrl', function($scope, Device, UserState, $mdDialog, $mdToast, $animate) {
+module.controller('EditSimCtrl', function($scope, Device, UserState, $mdDialog, $mdToast, $animate) {
 
 
   Device.loadDevices()

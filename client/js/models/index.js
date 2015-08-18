@@ -1,4 +1,4 @@
 require('./module');
 require('./User');
-require('./Device');
+require('./Sim');
 
