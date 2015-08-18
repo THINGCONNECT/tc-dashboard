@@ -32,7 +32,7 @@ router.post('/verify', function(req, res) {
       return res.ok({verifyCode: verification.verifyCode});
     } else {
       console.log("Verification not created", simId);
-      return res.err(500, err);
+      return res.error(500, err);
     }
   });
 
