@@ -21,6 +21,11 @@ module.service('UserState', function($q, User, Sim) {
       return q.then(function(user){
         self.user = user;
         console.log("set user ", self);
+        Sim.loadSims().then(function(sims){
+          console.log("SIMS LOADED", sims);
+          self.sims = sims;
+        })
+
         return self.user;
       }).catch(function(e){
         return $q.reject();

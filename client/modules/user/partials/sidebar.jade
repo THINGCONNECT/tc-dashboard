@@ -1,21 +1,17 @@
 div.sidebar
-  a(href="" ui-sref="dashboard")
-    img(src="/assets/images/logo-sm.png" alt="" class="logo")
   ul
     li
-      h2 my sim cards
-        a(href="" ui-sref="new-device" class="add")
+      h2
+        a(href="" ui-sref="dashboard")
+          my sim cards
+        a(href="" ui-sref="new-sim" class="add")
           i(class="fa fa-plus-square") &nbsp; add
       ul
-        li(ng-repeat="d in UserState.devices")
-          a(href="#" ng-click="UserState.editDevice(d)")
+        li(ng-repeat="sim in UserState.sims")
+          a(href="#" ng-click="UserState.editSim(sim)")
            i(class="fa fa-plug")
-            | &nbsp; {{d.name}}
+            | &nbsp; {{sim.simId}}
 
-    //- li.separate
-    //-   a(href="#" ui-sref="marketplace")
-    //-     i(class="fa fa-credit-card")
-    //-      | &nbsp; marketplace
     li.separate
       a(href="#" ui-sref="home" ng-click="UserState.logout()")
         i(class="fa fa-sign-out")

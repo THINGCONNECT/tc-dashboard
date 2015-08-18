@@ -9,12 +9,15 @@ module.service('Sim', function($http, $q, $compile, $sce) {
      * @param {Sim}
      */
     function Sim(_sim) {
+      for(var k in _sim) {
+        this[k] = _sim[k];
+      }
     }
 
-    var b = '/api/sim/';
+    var baseUrl = '/api/sim/';
 
     Sim.newSim = function(props) {
-      return $http.post(b, props)
+      return $http.post(baseUrl, props)
         .then(function(data) {
           var sim = new Sim(data.data);
           UserState.addNewSim(sim);
@@ -23,39 +26,29 @@ module.service('Sim', function($http, $q, $compile, $sce) {
     };
 
     Sim.loadSims = function() {
-      console.log("Load Sims");
-      // if(UserState.simsLoaded) return $q.when(UserState.sims);
-      // UserState.simsLoaded = true;
-      // return $http.get(b)
-      //   .then(function(data) {
-      //     var sims = data.data;
-      //     console.log(sims);
-      //     sims = sims.map(function(d) {
-      //       var rtn = new Sim(d);
-      //       UserState.addNewSim(rtn);
-      //       return rtn;
-      //     });
-      //     return sims;
-      //   })
-      //   .catch(function() {
-      //     UserState.simsLoaded = false;
-      //   });
+      return $http.get(baseUrl).then(function(data) {
+        var sims = data.data;
+        sims = sims.map(function(d) {
+          return new Sim(d);
+        });
+        return sims;
+      })
+      .catch(function() {
+        return [];
+      });
     };
 
     prototype.save = function() {
-      return $http.post(b + this._id, this)
-        .then(function(data) {
-          return data.data;
-        });
+      return $http.post(baseUrl + this._id, this).then(function(data) {
+        return data.data;
+      });
     };
 
     prototype.remove = function() {
       var self = this;
-      return $http.delete(b + this._id)
-        .then(function() {
-          UserState.removeSim(self);
-          return self;
-        });
+      return $http.delete(baseUrl + this._id).then(function() {
+        return self;
+      });
     };
 
     return Sim;

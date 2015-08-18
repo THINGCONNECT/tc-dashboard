@@ -10,9 +10,6 @@ module.exports = [
     state: {
       url: '/dashboard',
       views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
         content: {
           templateUrl: viewsPrefix + 'dashboard.html',
           controller: 'DashboardCtrl',
@@ -25,9 +22,6 @@ module.exports = [
     state: {
       url: '/new-sim',
       views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
         content: {
           templateUrl: viewsPrefix + 'new-sim.html',
           controller: 'NewSimCtrl',
@@ -40,9 +34,6 @@ module.exports = [
     state: {
       url: '/edit-sim/:id',
       views: {
-        // sidebar: {
-        //   templateUrl: partialsPrefix + 'sidebar.html',
-        // },
         content: {
           templateUrl: viewsPrefix + 'edit-sim.html',
           controller: 'EditSimCtrl'
