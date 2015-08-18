@@ -1,7 +1,7 @@
 
 var module = require('./module');
 
-module.service('User', function($http, UserState) {
+module.service('User', function($http, $q) {
   var User = (function() {
     User.displayName = 'User';
     var prototype = User.prototype, constructor = User;
@@ -17,29 +17,31 @@ module.service('User', function($http, UserState) {
       }
     }
 
-    var b = '/api/users';
+    var baseUrl = '/api/users';
 
+    var userCallback = function(data){
+      return new User(data.data);
+    }
+    var userCallbackFail = function(data){
+      return $q.reject("Failed to get user");
+    }
+    var handleUserPromise = function(q){
+      return q.then(userCallback).catch(userCallbackFail);
+    }
+    // Static Methods
     User.login = function(loginData) {
-      var self = this;
-
-      return $http.post(b + '/login', loginData).then(function(data) {
-        UserState.user = new User(data.data);
-        return UserState.user;
-      });
+      return handleUserPromise($http.post(baseUrl + '/login', loginData));
     };
-
-    prototype.logout = function() {
-      return $http.post(b + '/logout', {})
-        .finally(UserState.reset);
-    };
-
-    User.logout = prototype.logout;
-
     User.signup = function(signupData) {
-      return $http.post(b + '/signup', signupData).then(function(data) {
-        UserState.user = new User(data.data);
-        return UserState.user;
-      });
+      return handleUserPromise($http.post(baseUrl + '/signup', signupData));
+    };
+    User.status = function() {
+      return handleUserPromise($http.get(baseUrl));
+    };
+
+    // Class Methods
+    prototype.logout = function() {
+      return $http.post(baseUrl + '/logout', {});
     };
 
 

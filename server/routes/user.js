@@ -3,6 +3,14 @@ var router = require('express').Router();
 var User = mongoose.model('User');
 var passport = require('passport');
 
+router.get('/', function(req, res) {
+  if(req.user){
+    return res.ok(true);
+  }else{
+    return res.error(500);
+  }
+});
+
 router.post('/login', passport.authenticate('local'), function(req, res) {
   return res.ok(req.user);
 });
