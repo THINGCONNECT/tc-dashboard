@@ -13,16 +13,17 @@ module.controller('LoginCtrl', function($scope, $state, UserState, $mdDialog) {
 
   $scope.signupForm = {};
   $scope.signup = function(ev) {
-    UserState.signup($scope.signupForm)
-      .catch(function() {
-        $mdDialog.show(
-              $mdDialog.alert()
-                .parent(angular.element(document.body))
-                .title('Could not sign up')
-                .content('Probably someone else signed up before you, or something really broke. Sorry :(.')
-                .ok('Alrighty I\'ll try again')
-                .targetEvent(ev)
-            );
-      })
+    UserState.signup($scope.signupForm).then(function(){
+      $state.go('dashboard');
+    }).catch(function() {
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.body))
+          .title('Could not sign up')
+          .content('Probably someone else signed up before you, or something really broke. Sorry :(.')
+          .ok('Alrighty I\'ll try again')
+          .targetEvent(ev)
+      );
+    })
   }
 });
