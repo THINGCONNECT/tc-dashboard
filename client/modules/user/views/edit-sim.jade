@@ -13,7 +13,7 @@ div.dashboard-wrapper
           label SIM ID
           input(type="text" disabled ng-model="sim.simId")
           label Callback Payload URL
-          input(type="text" placeholder="Read Payload URL" disabled ng-model="sim.callbackUrl")
+          input(type="text" placeholder="Read Payload URL" ng-model="sim.callbackUrl")
           
           input(type="submit" class="btn btn-purple" value="Save")
-          a(class="btn block btn-small btn-remove" ng-click="removeSim()") Remove Device
+          a(class="btn block btn-small btn-remove" ng-click="removeSim()") Remove Sim

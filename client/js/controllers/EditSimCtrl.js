@@ -5,7 +5,9 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
     var sim = UserState.simId[simId];
     $scope.sim = sim;
     $scope.updateSim = function(ev) {
-      console.log("Update");
+      sim.save().then(function(){
+        UserState.loadSims();
+      });
     };
   }).catch(function(){
     $state.go('login');

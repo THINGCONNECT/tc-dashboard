@@ -26,7 +26,6 @@ module.service('UserState', function($q, User, Sim) {
           var sim = sims[i];
           self.simId[sim.simId] = sim;
         }
-        console.log("Sims loaded");
         return sims;
       })
     }
@@ -36,7 +35,7 @@ module.service('UserState', function($q, User, Sim) {
       return q.then(function(user){
         self.user = user;
         console.log("set user ", self);
-        
+
         return self.loadSims().then(function(){
           return self.user;
         });

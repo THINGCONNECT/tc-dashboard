@@ -18,9 +18,6 @@ module.service('Sim', function($http, $q, $compile, $sce) {
 
     Sim.newSim = function(props) {
       return $http.post(baseUrl + '/verify', props).then(function(data) {
-        console.log(data);
-        // var sim = new Sim(data.data);
-        // //UserState.addNewSim(sim);
         return data.data;
       });
     };
@@ -39,14 +36,14 @@ module.service('Sim', function($http, $q, $compile, $sce) {
     };
 
     prototype.save = function() {
-      return $http.post(baseUrl + this._id, this).then(function(data) {
+      return $http.post(baseUrl + this.simId, this).then(function(data) {
         return data.data;
       });
     };
 
     prototype.remove = function() {
       var self = this;
-      return $http.delete(baseUrl + this._id).then(function() {
+      return $http.delete(baseUrl + this.simId).then(function() {
         return self;
       });
     };

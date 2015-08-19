@@ -10,7 +10,7 @@ div.sidebar
         li(ng-repeat="sim in UserState.sims")
           a(ui-sref="edit-sim({id: sim.simId})")
            i(class="fa fa-phone-square")
-            | &nbsp; {{sim.simId}}
+            | &nbsp; {{sim.name}} ({{sim.simId}})
 
     li.separate
       a(href="#" ui-sref="home" ng-click="UserState.logout()")
