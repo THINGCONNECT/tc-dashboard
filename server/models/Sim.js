@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 var shortid = require('shortid');
 
 var SimSchema = new Schema({
+  name:         {type: String, required: true},
   simId:        {type: String, required: true, unique: true},
   callbackUrl:  {type: String},
 
@@ -19,6 +20,7 @@ var SimSchema = new Schema({
 
 SimSchema.statics.createSim = function(simId, cb) {
   var sim = new Sim({
+    name: simId,
     simId: simId,
     verified: false,
   });

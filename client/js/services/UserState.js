@@ -12,15 +12,21 @@ module.service('UserState', function($q, User, Sim) {
      * @param {UserState}
      */
     function UserState() {
-      this.sim = [];
+      this.sims = [];
+      this.simId = {};
       this.user;
     }
 
     prototype.loadSims = function(){
       var self = this;
       return Sim.loadSims().then(function(sims){
-        console.log("SIMS LOADED", sims);
         self.sims = sims;
+        self.simId = {};
+        for(var i in sims){
+          var sim = sims[i];
+          self.simId[sim.simId] = sim;
+        }
+        console.log("Sims loaded");
         return sims;
       })
     }
@@ -30,9 +36,10 @@ module.service('UserState', function($q, User, Sim) {
       return q.then(function(user){
         self.user = user;
         console.log("set user ", self);
-        self.loadSims();
-
-        return self.user;
+        
+        return self.loadSims().then(function(){
+          return self.user;
+        });
       }).catch(function(e){
         return $q.reject();
       });

@@ -20,6 +20,19 @@ router.get('/', function(req, res) {
   });
 });
 
+router.get('/:id', function(req, res) {
+  var simId = req.params.sim;
+  var user = req.user;
+  
+  Sim.findOne({simId: simId, owner:user}, function(err, sim) {
+    if(err || !sim){
+      return res.error(500);
+    }else{
+      res.ok(sim);
+    }
+  });
+});
+
 router.post('/verify', function(req, res) {
   var body = req.body;
   var simId = body.simId;
@@ -42,10 +55,12 @@ router.post('/:sim', function(req, res) {
   var body = req.body;
   var simId = req.params.sim;
   var user = req.user;
+  var name = body.name;
   var callbackUrl = body.callbackUrl;
 
   Sim.findOne({simId: simId, owner:user}, function(err, sim) {
     if(!err && sim){
+      sim.name = name;
       sim.callbackUrl = callbackUrl;
       sim.save(function(err){
         if(!err){

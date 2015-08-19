@@ -1,6 +1,15 @@
 var module = require('./module');
-module.controller('EditSimCtrl', function($scope, UserState, $mdDialog, $mdToast, $animate) {
-
+module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, $mdToast, $animate) {
+  UserState.loggedIn().then(function(user){
+    var simId = $state.params.id;
+    var sim = UserState.simId[simId];
+    $scope.sim = sim;
+    $scope.updateSim = function(ev) {
+      console.log("Update");
+    };
+  }).catch(function(){
+    $state.go('login');
+  });
 
   // Device.loadDevices()
   //   .then(function() {
