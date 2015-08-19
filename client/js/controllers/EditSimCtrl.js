@@ -9,6 +9,12 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
         UserState.loadSims();
       });
     };
+
+    $scope.$on('$destroy', function () { 
+      //Revert changes
+      UserState.loadSims();
+    });
+    
   }).catch(function(){
     $state.go('login');
   });
