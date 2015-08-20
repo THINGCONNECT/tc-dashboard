@@ -75,6 +75,26 @@ router.post('/:sim', function(req, res) {
   });
 });
 
+router.delete('/:sim', function(req, res) {
+  var body = req.body;
+  var simId = req.params.sim;
+  var user = req.user;
+  
+  Sim.findOne({simId: simId, owner:user}, function(err, sim) {
+    if(!err && sim){
+      sim.remove(function(err){
+        if(!err){
+          return res.ok(true);
+        }else{
+          return res.error(500);
+        }
+      });
+    }else{
+      return res.error(500);
+    }
+  });
+});
+
 router.get('/test/:sim/:payload', function(req, res) {
   var simId = req.params.sim;
   var payload = req.params.payload;
