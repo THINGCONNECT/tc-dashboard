@@ -119,4 +119,4 @@ var server = app.listen(process.env.PORT || 3000, function() {
 });
 
 // Run process
-// require('./process');
+require('./process');

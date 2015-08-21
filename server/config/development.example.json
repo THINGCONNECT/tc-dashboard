@@ -1,0 +1,7 @@
+{
+  "AMQP_URL":"",
+  "AMQP_LOGIN":"",
+  "AMQP_PASSWORD":"",
+  "AMQP_VHOST":"",
+  "AMQP_QUEUE":""
+}

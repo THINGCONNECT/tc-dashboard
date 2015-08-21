@@ -10,7 +10,7 @@ var url = require('url');
 
 router.get('/', function(req, res) {
   var user = req.user;
-  Sim.find({owner: user}, function(err, sims) {
+  Sim.find({owner: user, verified: true}, function(err, sims) {
     if(err || !sims){
       console.log("Message Processing Error", err, sims);
       return res.ok([]);
@@ -24,7 +24,7 @@ router.get('/:id', function(req, res) {
   var simId = req.params.sim;
   var user = req.user;
   
-  Sim.findOne({simId: simId, owner:user}, function(err, sim) {
+  Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
     if(err || !sim){
       return res.error(500);
     }else{
@@ -58,7 +58,7 @@ router.post('/:sim', function(req, res) {
   var name = body.name;
   var callbackUrl = body.callbackUrl;
 
-  Sim.findOne({simId: simId, owner:user}, function(err, sim) {
+  Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
     if(!err && sim){
       sim.name = name;
       sim.callbackUrl = callbackUrl;
@@ -79,10 +79,16 @@ router.delete('/:sim', function(req, res) {
   var body = req.body;
   var simId = req.params.sim;
   var user = req.user;
-  
-  Sim.findOne({simId: simId, owner:user}, function(err, sim) {
+
+  Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
     if(!err && sim){
-      sim.remove(function(err){
+      Verify.findOne({simId: sim.simId}, function(err, verification) {
+        if(!err && verification){
+          verification.remove();
+        }
+      });
+      sim.verified = false;
+      sim.save(function(err){
         if(!err){
           return res.ok(true);
         }else{
@@ -98,7 +104,6 @@ router.delete('/:sim', function(req, res) {
 router.get('/test/:sim/:payload', function(req, res) {
   var simId = req.params.sim;
   var payload = req.params.payload;
-  console.log("test payload");
   processMessage(simId, payload);
   res.ok(true);
 });
