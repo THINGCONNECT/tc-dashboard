@@ -126,21 +126,14 @@ function processSim(sim, payload){
 }
 
 function processMessage(simId, payload){
-  Sim.findOne({simId: simId}, function(err, sim) {
-    if(err){
-      console.log("Message Processing Error", simId, payload, err);
-      return;
+  Sim.findOneAndUpdate({simId: simId}, {
+    $setOnInsert: {
+      name: simId,
+      simId: simId,
+      verified: false,
     }
-    if(!sim) {
-      Sim.createSim(simId, function(err, sim) {
-        if(!err && sim)
-          processSim(sim, payload);
-        console.log(err, sim);
-      });
-      //Create sim without user
-      console.log("Sim not found, creating", simId, payload);
-    } else {
+  }, {upsert: true, new: true}, function (err, sim) {
+    if(!err && sim)
       processSim(sim, payload);
-    }
   });
 }

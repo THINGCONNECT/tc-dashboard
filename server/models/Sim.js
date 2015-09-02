@@ -16,7 +16,7 @@ var SimSchema = new Schema({
   incomingCount: {type: Number, default: 0},
   outgoingCount: {type: Number, default: 0}
 
-}, {collection: 'Sim', versionKey: false});
+}, {collection: 'Sim'});
 
 SimSchema.statics.createSim = function(simId, cb) {
   var sim = new Sim({
