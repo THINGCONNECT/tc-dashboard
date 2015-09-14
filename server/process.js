@@ -75,7 +75,8 @@ function processSimCallback(sim, payload){
     var simId = sim.simId;
     var encodedPayload = encodeURIComponent(payload);
     var options = {
-      host: urlObj.host,
+      host: urlObj.hostname,
+      port: urlObj.port,
       path: (urlObj.pathname?urlObj.pathname:"") + "?" + (urlObj.query?urlObj.query + "&":"") + "sim=" + simId + "&payload=" + encodedPayload
     };
     callback = function(response) {
@@ -87,10 +88,20 @@ function processSimCallback(sim, payload){
         console.log(str);
       });
     }
-    if(urlObj.protocol == "https:"){
-      https.request(options, callback).end();
-    }else if(urlObj.protocol == "http:"){
-      http.request(options, callback).end();
+    try{
+      if(urlObj.protocol == "https:"){
+        https.request(options, callback).on('error',function(e){
+           console.log("Error: ", urlObj, options, "\n" + e.message); 
+           console.log( e.stack );
+        }).end();
+      }else if(urlObj.protocol == "http:"){
+        http.request(options, callback).on('error',function(e){
+           console.log("Error: ", urlObj, options, "\n" + e.message); 
+           console.log( e.stack );
+        }).end();
+      }
+    }catch(e){
+      console.log("Failed to process sim: ", urlObj, options);
     }
   }
   console.log("processSimCallback()");
