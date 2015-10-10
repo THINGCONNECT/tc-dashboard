@@ -41,6 +41,7 @@
     "browser-sync": "^2.7.7",
     "del": "~1.2.0",
     "exports-loader": "^0.6.2",
+    "flightplan": "^0.6.6",
     "gulp": "~3.9.0",
     "gulp-jade": "^1.0.1",
     "gulp-minify-css": "^1.1.6",

@@ -4,6 +4,10 @@ all:
 
 deploy:
 	gulp clean-build;
+	fly staging;
+
+deploy-heroku:
+	gulp clean-build;
 	(cd ./dist; heroku builds:create);
 
 load:
