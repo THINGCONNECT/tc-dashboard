@@ -41,13 +41,13 @@ plan.local(function(local) {
 // run commands on remote hosts (destinations)
 plan.remote(function(remote) {
   remote.log('Move folder to root');
-  remote.sudo('cp -R /tmp/' + tmpDir + ' ~', {user: username});
+  remote.sudo('cp -R /tmp/' + tmpDir + ' ~/releases/', {user: username});
   remote.rm('-rf /tmp/' + tmpDir);
 
-  remote.log('Install dependencies');
-  remote.sudo('sudo npm --production --prefix ~/' + tmpDir + ' install ~/' + tmpDir, {user: username});
+  remote.log('Installing dependencies');
+  remote.sudo('sudo npm --production --prefix ~/releases/' + tmpDir + ' install ~/releases/' + tmpDir, {user: username});
 
-  remote.log('Reload application');
-  remote.sudo('ln -snf ~/' + tmpDir + ' ~/'+appName, {user: username});
+  remote.log('Reloading application');
+  remote.sudo('ln -snf ~/releases/' + tmpDir + ' ~/'+appName, {user: username});
   remote.exec('sudo restart ' + appName);
 });

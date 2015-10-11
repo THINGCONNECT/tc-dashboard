@@ -47,8 +47,33 @@ nconf.defaults({
 	NODE_ENV: "development",
 });
 
-mongoose.connect(nconf.get('MONGOLAB_URI') || nconf.get('MONGO_URI'));
+var db = mongoose.connection;
+var reconnectTime;
 
+function connectMongo(){
+  mongoose.connect(nconf.get('MONGOLAB_URI') || nconf.get('MONGO_URI'), {server:{auto_reconnect:true}});
+}
+
+connectMongo();
+//Auto reconnect script
+db.on('error', function(error) {
+  // console.error('Error in MongoDb connection: ' + error);
+  mongoose.disconnect();
+});
+// db.on('reconnected', function () {
+//   console.log('MongoDB reconnected!');
+// });
+db.on('disconnected', function() {
+  console.log('MongoDB disconnected!');
+  if(reconnectTime) clearTimeout(reconnectTime);
+  reconnectTime = setTimeout(connectMongo, 500);
+});
+db.on('connected', function() {
+  console.log('MongoDB connected!');
+});
+// db.once('open', function() {
+//   console.log('MongoDB connection opened!');
+// });
 
 http.ServerResponse.prototype.ok = function(data) {
   return this.json(data);
@@ -118,5 +143,5 @@ var server = app.listen(process.env.PORT || 3000, function() {
 	console.log('Server listening at http://%s:%s', host, port);
 });
 
-// Run process
-require('./process');
+// Run SIM process
+require('./simHandler');
