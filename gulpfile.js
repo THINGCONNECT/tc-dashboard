@@ -1,12 +1,15 @@
 process.env.UV_THREADPOOL_SIZE = 100;
 var gulp = require('gulp');
 var jade = require('gulp-jade');
+var inject = require('gulp-inject');
 var plumber = require('gulp-plumber');
+var foreach = require('gulp-foreach');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 var webpack = require('webpack-stream');
 
 var fs = require('fs');
+var path = require('path');
 var browserSync = require('browser-sync').create();
 var merge = require('merge2');
 var named = require('vinyl-named');
@@ -110,7 +113,18 @@ var htmlErrorHandler = function(err) {
 };
 
 gulp.task('client-html-dev', function() {
+  var injectConfig = require('./config/inject').dev;
   return gulp.src('client/**/*.jade')
+    .pipe(foreach(function (stream, file) {
+      var baseFileName = path.basename(file.path);
+      var hasInject = injectConfig[baseFileName];
+      if(hasInject) {
+        return stream
+          .pipe(inject(gulp.src(hasInject)));
+      } else {
+        return stream;
+      }
+    }))
     .pipe(plumber({
       errorHandler: htmlErrorHandler
     }))
@@ -121,8 +135,19 @@ gulp.task('client-html-dev', function() {
 });
 
 gulp.task('client-html', function() {
+  var injectConfig = require('./config/inject').dev;
   var minifyHtml = require('gulp-minify-html');
   return gulp.src('client/**/*.jade')
+    .pipe(foreach(function (stream, file) {
+      var baseFileName = path.basename(file.path);
+      var hasInject = injectConfig[baseFileName];
+      if(hasInject) {
+        return stream
+          .pipe(inject(gulp.src(hasInject)));
+      } else {
+        return stream;
+      }
+    }))
     .pipe(plumber({
       errorHandler: htmlErrorHandler
     }))

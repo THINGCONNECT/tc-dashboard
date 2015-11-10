@@ -101,6 +101,7 @@ if (process.env.DEBUG) {
 /** Serve the public static assets before processing anything  */
 app.use('/', serveStatic(__dirname + '/public', {'index': ['index.html']}));
 app.use(favicon(__dirname + '/favicon.ico'));
+app.use('/node_modules', serveStatic(__dirname + (development ? '/../node_modules' : '/node_modules')));
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -21,6 +21,8 @@
     "errorhandler": "^1.3.6",
     "express": "^4.12.4",
     "express-session": "^1.11.2",
+    "gulp-foreach": "^0.1.0",
+    "gulp-inject": "^3.0.0",
     "mime": "^1.3.4",
     "moment": "^2.8.4",
     "mongoose": "^4.0.4",
