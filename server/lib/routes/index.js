@@ -18,7 +18,6 @@ function loadRoutes(routes, router, pathAcc) {
         if(path == 'root') {
           path = '';
         }
-        console.log(path);
         // convert directories with preceding underscore to colon for params
         if(path.charAt(0) == '_') {
           path = ':' + path.substring(1);
