@@ -16,7 +16,7 @@ var nconf = require('nconf');
 var mongoose = require('mongoose');
 
 // Define global constants
-require('./global');
+require('lib/global');
 
 /**
  * Load configuration
@@ -38,7 +38,7 @@ nconf.overrides({
 	development: development
 });
 
-nconf.file(development ? __dirname + '/config/development.json' : __dirname + '/config/production.json');
+nconf.file(development ? __dirname + '/lib/config/development.json' : __dirname + '/lib/config/production.json');
 
 nconf.defaults({
 	PORT: 3000,
@@ -101,7 +101,7 @@ if (process.env.DEBUG) {
 /** Serve the public static assets before processing anything  */
 app.use('/', serveStatic(__dirname + '/public', {'index': ['index.html']}));
 app.use('/node_modules', serveStatic(__dirname + (development ? '/../node_modules' : '/node_modules')));
-app.use(favicon(__dirname + '/favicon.ico'));
+app.use(favicon(__dirname + '/lib/favicon.ico'));
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -118,12 +118,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Load models
-require('./models');
+require('lib/models');
 
 // Init auth
-require('./auth');
+require('lib/auth');
 // Load routes
-require('./routes')(app);
+app.use('/', require('lib/routes'));
 
 app.get("/client_token", function (req, res) {
   gateway.clientToken.generate({}, function (err, response) {
@@ -145,4 +145,4 @@ var server = app.listen(process.env.PORT || 3000, function() {
 });
 
 // Run SIM process
-require('./simHandler');
+require('lib/simHandler');

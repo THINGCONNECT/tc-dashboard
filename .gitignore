@@ -32,8 +32,8 @@ node_modules
 database
 
 # ignore environment variables
-server/config/development.json
-server/config/production.json
+server/lib/config/development.json
+server/lib/config/production.json
 
 # ignore builds
 build
