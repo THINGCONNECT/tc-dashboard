@@ -20,14 +20,15 @@ function loadRoutes(routes, router, pathAcc) {
         }
         // convert directories with preceding underscore to colon for params
         if(path.charAt(0) == '_') {
-          param = ':' + path.substring(1);
+          path = ':' + path.substring(1);
+          param = [routes[originalPath], router, pathAcc + '/' + path];
           continue;
         }
         loadRoutes(routes[originalPath], router, pathAcc + '/' + path);
       }
     }
     if(param){
-      loadRoutes(routes[originalPath], router, pathAcc + '/' + param);
+      loadRoutes.apply(null, param);
     }
   } else {
     console.log('DEFINED ROUTE: ' + pathAcc);
