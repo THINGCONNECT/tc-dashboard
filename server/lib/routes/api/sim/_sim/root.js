@@ -6,7 +6,8 @@ var router = require('express').Router({
 var Sim = mongoose.model('Sim');
 var Verify = mongoose.model('Verify');
 
-router.get('/:id', function(req, res) {
+router.route('/').get(function(req, res) {
+  //Get sim info
   var simId = req.params.sim;
   var user = req.user;
   
@@ -17,9 +18,8 @@ router.get('/:id', function(req, res) {
       res.ok(sim);
     }
   });
-});
-//Update sim info
-router.post('/', function(req, res) {
+}).post(function(req, res) {
+  //Update sim info
   var body = req.body;
   var simId = req.params.sim;
   var user = req.user;
@@ -41,9 +41,8 @@ router.post('/', function(req, res) {
       return res.error(500);
     }
   });
-});
-
-router.delete('/', function(req, res) {
+}).delete(function(req, res) {
+  //Delete sim
   var body = req.body;
   var simId = req.params.sim;
   var user = req.user;
