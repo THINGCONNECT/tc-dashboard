@@ -7,8 +7,9 @@ Install
 =======
 1. Get node if you haven't already. [Highly recommend nvm](https://github.com/creationix/nvm)
 1. Install gulp: `npm i -g gulp`
-1. Install gulp: `npm i -g flightplan`
+1. Install flightplan: `npm i -g flightplan`
 1. Install mongodb and make sure `mongod` is in your `PATH`
+1. Install modules: `npm install`
 
 Environment variables
 ===========
