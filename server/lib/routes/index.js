@@ -20,8 +20,7 @@ function loadRoutes(routes, router, pathAcc) {
         }
         // convert directories with preceding underscore to colon for params
         if(path.charAt(0) == '_') {
-          path = ':' + path.substring(1);
-          param = path;
+          param = ':' + path.substring(1);;
           continue;
         }
         loadRoutes(routes[originalPath], router, pathAcc + '/' + path);
