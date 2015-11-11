@@ -14,7 +14,7 @@ module.service('Sim', function($http, $q, $compile, $sce) {
       }
     }
 
-    var baseUrl = '/api/sim/';
+    var baseUrl = '/api/sim';
 
     Sim.newSim = function(props) {
       return $http.post(baseUrl + '/verify', props).then(function(data) {

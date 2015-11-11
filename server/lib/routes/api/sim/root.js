@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
-var router = require('express').Router();
+var router = require('express').Router({
+  mergeParams: true
+});
+
 var Sim = mongoose.model('Sim');
 var Verify = mongoose.model('Verify');
 
@@ -8,7 +11,7 @@ var https = require('https');
 
 var url = require('url');
 
-router.get('/', function(req, res) {
+router.route('/').get(function(req, res) {
   var user = req.user;
   Sim.find({owner: user, verified: true}, function(err, sims) {
     if(err || !sims){
@@ -16,87 +19,6 @@ router.get('/', function(req, res) {
       return res.ok([]);
     }else{
       res.ok(sims);
-    }
-  });
-});
-
-router.get('/:id', function(req, res) {
-  var simId = req.params.sim;
-  var user = req.user;
-  
-  Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
-    if(err || !sim){
-      return res.error(500);
-    }else{
-      res.ok(sim);
-    }
-  });
-});
-
-router.post('/verify', function(req, res) {
-  var body = req.body;
-  var simId = body.simId;
-  var user = req.user;
-  
-  Verify.createVerification(simId, user, function(err, verification){
-    if(!err){
-      console.log("Verification Created ", verification.verifyCode);
-      return res.ok({verifyCode: verification.verifyCode});
-    } else {
-      console.log("Verification not created", simId);
-      return res.error(500, err);
-    }
-  });
-
-});
-
-//Update sim info
-router.post('/:sim', function(req, res) {
-  var body = req.body;
-  var simId = req.params.sim;
-  var user = req.user;
-  var name = body.name;
-  var callbackUrl = body.callbackUrl;
-
-  Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
-    if(!err && sim){
-      sim.name = name;
-      sim.callbackUrl = callbackUrl;
-      sim.save(function(err){
-        if(!err){
-          return res.ok(true);
-        }else{
-          return res.error(500);
-        }
-      });
-    }else{
-      return res.error(500);
-    }
-  });
-});
-
-router.delete('/:sim', function(req, res) {
-  var body = req.body;
-  var simId = req.params.sim;
-  var user = req.user;
-
-  Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
-    if(!err && sim){
-      Verify.findOne({simId: sim.simId}, function(err, verification) {
-        if(!err && verification){
-          verification.remove();
-        }
-      });
-      sim.verified = false;
-      sim.save(function(err){
-        if(!err){
-          return res.ok(true);
-        }else{
-          return res.error(500);
-        }
-      });
-    }else{
-      return res.error(500);
     }
   });
 });
