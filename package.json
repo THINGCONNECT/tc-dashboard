@@ -8,7 +8,7 @@
     "install": "bash ./bin/npm-post-install"
   },
   "engines": {
-    "node": "^0.10.40"
+    "node": "^0.12.7"
   },
   "private": true,
   "dependencies": {

@@ -48,6 +48,7 @@ plan.remote(function(remote) {
   remote.sudo('sudo npm --production --prefix ~/releases/' + tmpDir + ' install ~/releases/' + tmpDir, {user: username});
 
   remote.log('Reloading application');
+  remote.sudo('ln -s ~/releases/' + tmpDir + '/lib ~/releases/' + tmpDir + '/node_modules/lib', {user: username});
   remote.sudo('ln -snf ~/releases/' + tmpDir + ' ~/'+appName, {user: username});
   remote.exec('sudo restart ' + appName);
 });
