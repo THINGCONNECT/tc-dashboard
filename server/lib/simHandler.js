@@ -1,5 +1,4 @@
 var nconf = require('nconf');
-
 var mongoose = require('mongoose');
 var Sim = mongoose.model('Sim');
 var Verify = mongoose.model('Verify');
@@ -15,47 +14,50 @@ if(!(nconf.get('AMQP_URL') && nconf.get('AMQP_LOGIN') && nconf.get('AMQP_PASSWOR
   return;
 }
 
-var connection = amqp.createConnection(
-  {
-    host: nconf.get('AMQP_URL'),
-    //port: 5672,
-    login: nconf.get('AMQP_LOGIN'),
-    password: nconf.get('AMQP_PASSWORD'),
-    vhost: nconf.get('AMQP_VHOST'),
-    // connectionTimeout: 10000,
-    // authMechanism: 'AMQPLAIN',
-    // noDelay: true,
-    // ssl: {
-    //   enabled : false
-    // }
-  }
-);
+if(nconf.get('POLL_AMQP')){
+  var connection = amqp.createConnection(
+    {
+      host: nconf.get('AMQP_URL'),
+      //port: 5672,
+      login: nconf.get('AMQP_LOGIN'),
+      password: nconf.get('AMQP_PASSWORD'),
+      vhost: nconf.get('AMQP_VHOST'),
+      // connectionTimeout: 10000,
+      // authMechanism: 'AMQPLAIN',
+      // noDelay: true,
+      // ssl: {
+      //   enabled : false
+      // }
+    }
+  );
 
-console.log("Connecting");
+  console.log("Connecting to AMQP");
 
-connection.on('ready', function () {
-  console.log("Connected ", connection.state);
-  connection.queue(nconf.get('AMQP_QUEUE'), {passive:true, durable: true}, function (q) {
-    console.log("Queue");
-    q.subscribe(function (message, headers, deliveryInfo, messageObject) {
-      // Print messages to stdout
-      // q.bind('#');
-      console.log(message.data.toString());
-      
-      var data = message.data.toString();
-      var dataArr = data.split(",");
-      console.log(dataArr);
-      if(dataArr.length == 5){
-        var simId = dataArr[1].substr(6);
-        var payload = dataArr[4];
-        processMessage(simId, payload);
-      }else{
-        console.log("Malformed Message", data);
-      }
+  connection.on('ready', function () {
+    console.log("Connected ", connection.state);
+    connection.queue(nconf.get('AMQP_QUEUE'), {passive:true, durable: true}, function (q) {
+      console.log("Queue");
+      q.subscribe(function (message, headers, deliveryInfo, messageObject) {
+        // Print messages to stdout
+        // q.bind('#');
+        console.log(message.data.toString());
+        
+        var data = message.data.toString();
+        var dataArr = data.split(",");
+        console.log(dataArr);
+        if(dataArr.length == 5){
+          var simId = dataArr[1].substr(6);
+          var payload = dataArr[4];
+          processMessage(simId, payload);
+        }else{
+          console.log("Malformed Message", data);
+        }
+      });
     });
   });
-});
-
+}else{
+  console.log("AMQP Polling is off");
+}
 
 //http://localhost:5000/api/sim/test/123/*86803%23
 function activateSim(sim, verification){
