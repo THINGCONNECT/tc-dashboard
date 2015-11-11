@@ -18,7 +18,7 @@ router.route('/').get(function(req, res) {
   res.ok(true);
 });
 
-//http://localhost:5000/api/sim/test/123/*86803%23
+//http://localhost:5000/api/sim/123/payload/*86803%23
 function activateSim(sim, verification){
   //Set ownership of sim
   sim.verified = true;
