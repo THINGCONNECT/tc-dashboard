@@ -10,6 +10,7 @@ module.exports = router;
 function loadRoutes(routes, router, pathAcc) {
   pathAcc = pathAcc || '';
   if(typeof routes === 'object' && Object.keys(routes).length) {
+    var param = null;
     for (var path in routes) {
       if (routes.hasOwnProperty(path)) {
         var originalPath = path;
@@ -20,9 +21,14 @@ function loadRoutes(routes, router, pathAcc) {
         // convert directories with preceding underscore to colon for params
         if(path.charAt(0) == '_') {
           path = ':' + path.substring(1);
+          param = path;
+          continue;
         }
         loadRoutes(routes[originalPath], router, pathAcc + '/' + path);
       }
+    }
+    if(param){
+      loadRoutes(routes[originalPath], router, pathAcc + '/' + param);
     }
   } else {
     console.log('DEFINED ROUTE: ' + pathAcc);
