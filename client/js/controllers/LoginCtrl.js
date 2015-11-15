@@ -1,6 +1,9 @@
 var module = require('./module');
 
 module.controller('LoginCtrl', function($scope, $state, UserState, $mdDialog) {
+  UserState.loggedIn().then(function(user){
+    $state.go('dashboard');
+  });
   $scope.loginForm = {};
   $scope.login = function(ev) {
     UserState.login($scope.loginForm).then(function() {

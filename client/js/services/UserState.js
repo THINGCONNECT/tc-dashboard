@@ -64,6 +64,10 @@ module.service('UserState', function($q, User, Sim) {
       }
     }
 
+    prototype.delete = function(credentials){
+      return this.handleUserLogin(User.delete(credentials));
+    }
+
     prototype.newSim = function(sim) {
       return Sim.newSim(sim);
       // console.log("Add new sim ", sim);

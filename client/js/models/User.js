@@ -17,7 +17,7 @@ module.service('User', function($http, $q) {
       }
     }
 
-    var baseUrl = '/api/users';
+    var baseUrl = '/api/user';
 
     var userCallback = function(data){
       return new User(data.data);
@@ -37,6 +37,9 @@ module.service('User', function($http, $q) {
     };
     User.status = function() {
       return handleUserPromise($http.get(baseUrl));
+    };
+    User.delete = function(loginData) {
+      return handleUserPromise($http.delete(baseUrl, loginData));
     };
 
     // Class Methods

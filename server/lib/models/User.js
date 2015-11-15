@@ -52,11 +52,9 @@ UserSchema.methods.validPassword = function(password, callback) {
   });
 };
 
-UserSchema.methods.getDevices = function(cb) {
-  return this.model('Device').find({owner: this._id}, cb);
+UserSchema.methods.removeUser = function(cb) {
+  return this.model('Sim').find({owner: this._id}, cb);
 };
-
-
 
 ////////////////////////
 // User model
