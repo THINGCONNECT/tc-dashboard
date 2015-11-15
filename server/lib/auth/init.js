@@ -14,7 +14,6 @@ passport.deserializeUser(function(id, done) {
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.log("Passport login strat", username);
     User.findOne({ username: username.toLowerCase() }, function(err, user) {
       if (err) { return done(err); }
       if (!user) {
