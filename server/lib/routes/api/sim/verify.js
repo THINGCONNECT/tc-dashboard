@@ -5,14 +5,12 @@ var router = require('express').Router({
 
 var Verify = mongoose.model('Verify');
 
-router.route('/')
-
-.post(function(req, res) {
+router.route('/').post(function(req, res) {
+  var body = req.body;
+  var simId = body.simId;
+  var user = req.user;
+  if(req.user){
     console.log("Verification");
-    var body = req.body;
-    var simId = body.simId;
-    var user = req.user;
-
     Verify.createVerification(simId, user, function(err, verification) {
       if (!err) {
         console.log("Verification Created ", verification.verifyCode);
@@ -24,10 +22,12 @@ router.route('/')
         return res.error(500, err);
       }
     });
-  })
-  .get(function(req, res) {
-    console.log("Verification");
-    return res.ok("works");
-  });
+  }else{
+    return res.error(500, "Not logged in");
+  }
+})
+.get(function(req, res) {
+  return res.ok("works");
+});
 
 module.exports = router;

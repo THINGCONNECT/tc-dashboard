@@ -15,7 +15,7 @@ router.route('/').get(function(req, res) {
   console.log("DELETE REQUEST!");
   var user = res.user;
   if(user){
-    user.delete();
+    console.log(user.delete());
   }
 });
 
