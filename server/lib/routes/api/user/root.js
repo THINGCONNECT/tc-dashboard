@@ -12,10 +12,13 @@ router.route('/').get(function(req, res) {
     return res.error(500);
   }
 }).delete(function(req, res){
-  console.log("DELETE REQUEST!");
-  var user = res.user;
+  var user = req.user;
   if(user){
-    console.log(user.delete());
+    console.log("DELETE REQUEST!");
+    console.log(user.delete(function(err){
+      req.logout();
+      res.ok();
+    }));
   }
 });
 

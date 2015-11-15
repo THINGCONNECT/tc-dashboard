@@ -1,6 +1,7 @@
 // Mongoose
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Verify = mongoose.model('Verify');
 // bcrypt
 var bcrypt = require('bcrypt');
 
@@ -53,7 +54,19 @@ UserSchema.methods.validPassword = function(password, callback) {
 };
 
 UserSchema.methods.delete = function(cb) {
-  return this.model('Sim').find({owner: this._id}, cb);
+  this.model('Sim').find({owner: this._id}, function(err, sims){
+    for(var i in sims){
+      var sim = sims[i];
+      Verify.findOne({simId: sim.simId}, function(err, verification) {
+        if(!err && verification){
+          verification.remove();
+        }
+      });
+      sim.verified = false;
+      sim.save();
+    }
+  });
+  this.remove(cb);
 };
 
 ////////////////////////
