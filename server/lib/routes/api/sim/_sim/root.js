@@ -21,7 +21,6 @@ router.route('/').get(function(req, res) {
   }else{
     return res.error(500, "Not logged in");
   }
-}
 }).post(function(req, res) {
   //Update sim info
   var body = req.body;
