@@ -4,4 +4,6 @@ module.controller('DashboardCtrl', function($scope, $state, UserState, Sim, $mdT
   }).catch(function(){
     $state.go('login');
   });
+  // console.log("Remove User!");
+  UserState.delete();
 });

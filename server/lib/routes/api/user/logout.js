@@ -5,7 +5,7 @@ var router = require('express').Router({
 var User = mongoose.model('User');
 var passport = require('passport');
 
-router.post('/logout', function(req, res) {
+router.route('/').post(function(req, res) {
   if(!req.user) return res.ok();
   req.logout();
   return res.ok();

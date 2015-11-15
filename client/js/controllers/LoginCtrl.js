@@ -10,7 +10,14 @@ module.controller('LoginCtrl', function($scope, $state, UserState, $mdDialog) {
       console.log("LOGGED IN");
       $state.go('dashboard');
     }).catch(function() {
-      console.log("NOT LOGGED IN");
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.body))
+          .title('Could not log in')
+          .content('Invalid username/password')
+          .ok('Alrighty I\'ll try again')
+          .targetEvent(ev)
+      );
     });
   };
 

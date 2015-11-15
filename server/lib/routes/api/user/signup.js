@@ -5,7 +5,7 @@ var router = require('express').Router({
 var User = mongoose.model('User');
 var passport = require('passport');
 
-router.post('/signup', function(req, res) {
+router.route('/').post(function(req, res) {
   return User.createUser(req.body.username, req.body.password, function(err, user) {
     if(err) return res.error(500);
     return req.login(user, function(err) {

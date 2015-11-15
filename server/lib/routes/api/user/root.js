@@ -13,6 +13,10 @@ router.route('/').get(function(req, res) {
   }
 }).delete(function(req, res){
   console.log("DELETE REQUEST!");
+  var user = res.user;
+  if(user){
+    user.delete();
+  }
 });
 
 module.exports = router;
