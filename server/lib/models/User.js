@@ -23,9 +23,7 @@ UserSchema.pre('remove', function(next) {
   this.model('Sim').find({owner: this._id}, function(err, sims){
     for(var i in sims){
       var sim = sims[i];
-      Verify.findOne({simId: sim.simId}).remove().exec();
-      sim.verified = false;
-      sim.save();
+      sim.disown();
     }
     next(err);
   });
