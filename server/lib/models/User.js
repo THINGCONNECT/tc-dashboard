@@ -8,13 +8,16 @@ var bcrypt = require('bcrypt');
 var UserSchema = new Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  // apiKey:   { type: String, unique: true },
+  type: { type: String, default: "user" },
 }, {collection: 'User'});
 
 
 ////////////////////////
 // Statics
 ////////////////////////
+UserSchema.statics.TYPE_USER = "user";
+UserSchema.statics.TYPE_ADMIN = "admin";
+
 UserSchema.statics.createUser = function(username, password, callback) {
   username = username.toLowerCase();
   this.model('User').findOne({username: username}, function(err, user) {
@@ -22,17 +25,17 @@ UserSchema.statics.createUser = function(username, password, callback) {
       return callback(new Error('User already exists.'));
     } else {
       return bcrypt.genSalt(10, function(err, salt) {
-          bcrypt.hash(password, salt, function(err, hash) {
-            var newUser = new User({
-              username: username,
-              password: hash,
-            });
-
-            newUser.save(function(err) {
-              if(err) return callback(err);
-              return callback(null, newUser);
-            });
+        bcrypt.hash(password, salt, function(err, hash) {
+          var newUser = new User({
+            username: username,
+            password: hash,
           });
+
+          newUser.save(function(err) {
+            if(err) return callback(err);
+            return callback(null, newUser);
+          });
+        });
       });
     }
   })

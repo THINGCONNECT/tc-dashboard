@@ -1,5 +1,7 @@
 
 require('./init');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
 
 module.exports = {
   ensureAuthMiddleware: function(req, res, next) {
@@ -7,11 +9,5 @@ module.exports = {
       return res.error(403);
     }
     next();
-  },
-  isAdmin: function(req, res, next) {
-    if(req.user && req.user.type == "admin") {
-      return next();
-    }
-    return res.error(403);
   }
 };
