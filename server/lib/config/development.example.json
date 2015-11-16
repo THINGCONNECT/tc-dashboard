@@ -3,6 +3,7 @@
   "AMQP_LOGIN":"",
   "AMQP_PASSWORD":"",
   "AMQP_VHOST":"",
-  "AMQP_QUEUE":"",
+  "AMQP_QUEUE_IN":"",
+  "AMQP_QUEUE_OUT":"",
   "POLL_AMQP":true
 }
