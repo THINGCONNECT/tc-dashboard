@@ -36,14 +36,14 @@ module.service('Sim', function($http, $q, $compile, $sce) {
     };
 
     prototype.save = function() {
-      return $http.post(baseUrl + this.simId, this).then(function(data) {
+      return $http.post(baseUrl + '/' + this.simId, this).then(function(data) {
         return data.data;
       });
     };
 
     prototype.remove = function() {
       var self = this;
-      return $http.delete(baseUrl + this.simId).then(function() {
+      return $http.delete(baseUrl + '/' + this.simId).then(function() {
         return self;
       });
     };

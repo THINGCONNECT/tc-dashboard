@@ -7,7 +7,7 @@ var VerifySchema = new Schema({
   owner:        {type: Schema.Types.ObjectId, ref: 'User'},
   dateCreated:  {type: Date, default: Date.now},
   verified:     {type: Boolean, default: false},
-  verifyCode:    {type: String},
+  verifyCode:   {type: String},
   //Lock verify if too many verified attempts
 }, {collection: 'Verify', versionKey: false});
 

@@ -8,7 +8,8 @@ var bcrypt = require('bcrypt');
 var UserSchema = new Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  type: { type: String, default: "user" },
+  type:     { type: String, default: "user" },
+  sims:     [{type: Schema.Types.ObjectId, ref: 'Sim'}],
 }, {collection: 'User'});
 
 
@@ -60,11 +61,7 @@ UserSchema.methods.delete = function(cb) {
   this.model('Sim').find({owner: this._id}, function(err, sims){
     for(var i in sims){
       var sim = sims[i];
-      Verify.findOne({simId: sim.simId}, function(err, verification) {
-        if(!err && verification){
-          verification.remove();
-        }
-      });
+      Verify.findOne({simId: sim.simId}).remove().exec();
       sim.verified = false;
       sim.save();
     }

@@ -3,6 +3,7 @@ var router = require('express').Router({
   mergeParams: true
 });
 
+var User = mongoose.model('User');
 var Sim = mongoose.model('Sim');
 var Verify = mongoose.model('Verify');
 
@@ -46,11 +47,8 @@ router.route('/').get(function(req, res) {
   var user = req.user;
   Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
     if(!err && sim){
-      Verify.findOne({simId: sim.simId}, function(err, verification) {
-        if(!err && verification){
-          verification.remove();
-        }
-      });
+      User.findByIdAndUpdate(user, {$pull: {sims: sim._id}}).exec();
+      Verify.findOne({simId: sim.simId}).remove().exec();
       sim.verified = false;
       sim.save(function(err){
         if(!err){

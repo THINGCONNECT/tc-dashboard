@@ -1,5 +1,6 @@
 var nconf = require('nconf');
 var mongoose = require('mongoose');
+var User = mongoose.model('User');
 var Sim = mongoose.model('Sim');
 var Verify = mongoose.model('Verify');
 
@@ -64,7 +65,15 @@ function activateSim(sim, verification){
   //Set ownership of sim
   sim.verified = true;
   sim.owner = verification.owner;
-  sim.save();
+  sim.save(function(err){
+    if(!err){
+      User.findByIdAndUpdate(verification.owner, {$push: {sims: sim}}, function(err, user) {
+        if(err){
+          console.error("Something went wrong activating sim", err);
+        }
+      });
+    }
+  });
 
   //delete verification
   verification.verified = true;
@@ -150,3 +159,7 @@ function processMessage(simId, payload){
       processSim(sim, payload);
   });
 }
+
+module.exports = {
+  processMessage: processMessage
+};
