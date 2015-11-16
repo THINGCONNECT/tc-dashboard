@@ -24,7 +24,7 @@ SimSchema.statics.createSim = function(simId, cb) {
     verified: false,
   });
   sim.save(function(err){
-    cb(err, sim);
+    if(cb) cb(err, sim);
   });
 };
 
@@ -33,11 +33,11 @@ SimSchema.methods.verify = function(str, cb) {
     this.verified = true;
     this.save(function(err, res){
       if(!err){
-        cb(true);
+        if(cb) cb(true);
       }
     });
   }else{
-    cb(false);
+    if(cb) cb(false);
   }
 };
 
@@ -48,7 +48,7 @@ SimSchema.methods.disown = function(cb){
   });
   this.verified = false;
   this.save(function(err){
-   return cb(err);
+   if(cb) return cb(err);
   });
 }
 
