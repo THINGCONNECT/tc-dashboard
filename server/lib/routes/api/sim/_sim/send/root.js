@@ -7,9 +7,11 @@ var simHandler = require('lib/simHandler');
 //This endpoint is for testing purposes
 router.route('/').get(function(req, res) {
   var simId = req.params.sim;
-  var payload = req.params.payload;
-  simHandler.processMessage(simId, payload);
-  res.ok(true);
+  var payload = req.body.payload;
+  payload = "TEST!";
+  simHandler.sendMessage(simId, payload, function(err) {
+    res.ok(true);
+  });
 });
 
 //http://localhost:5000/api/sim/123/*86803%23

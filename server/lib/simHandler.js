@@ -15,28 +15,28 @@ if(!(nconf.get('AMQP_URL') && nconf.get('AMQP_LOGIN') && nconf.get('AMQP_PASSWOR
   return;
 }
 
+var connection = amqp.createConnection(
+  {
+    host: nconf.get('AMQP_URL'),
+    //port: 5672,
+    login: nconf.get('AMQP_LOGIN'),
+    password: nconf.get('AMQP_PASSWORD'),
+    vhost: nconf.get('AMQP_VHOST'),
+    // connectionTimeout: 10000,
+    // authMechanism: 'AMQPLAIN',
+    // noDelay: true,
+    // ssl: {
+    //   enabled : false
+    // }
+  }
+);
 if(nconf.get('POLL_AMQP')){
-  var connection = amqp.createConnection(
-    {
-      host: nconf.get('AMQP_URL'),
-      //port: 5672,
-      login: nconf.get('AMQP_LOGIN'),
-      password: nconf.get('AMQP_PASSWORD'),
-      vhost: nconf.get('AMQP_VHOST'),
-      // connectionTimeout: 10000,
-      // authMechanism: 'AMQPLAIN',
-      // noDelay: true,
-      // ssl: {
-      //   enabled : false
-      // }
-    }
-  );
 
   console.log("Connecting to AMQP");
 
   connection.on('ready', function () {
     console.log("Connected ", connection.state);
-    connection.queue(nconf.get('AMQP_QUEUE'), {passive:true, durable: true}, function (q) {
+    connection.queue(nconf.get('AMQP_QUEUE_IN'), {passive:true, durable: true}, function (q) {
       console.log("Queue");
       q.subscribe(function (message, headers, deliveryInfo, messageObject) {
         // Print messages to stdout
@@ -160,6 +160,18 @@ function processMessage(simId, payload){
   });
 }
 
+function sendMessage(simId, payload, cb){
+  try{
+    connection.publish(nconf.get('AMQP_QUEUE_OUT'), payload, null, function(err, a){
+      // cant get this to work properly
+    });
+    cb();
+  }catch(e){
+    cb(e);
+  }
+}
+
 module.exports = {
-  processMessage: processMessage
+  processMessage: processMessage,
+  sendMessage: sendMessage
 };
