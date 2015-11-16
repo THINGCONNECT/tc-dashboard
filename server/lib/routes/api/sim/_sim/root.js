@@ -48,7 +48,9 @@ router.route('/').get(function(req, res) {
   Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
     if(!err && sim){
       User.findByIdAndUpdate(user, {$pull: {sims: sim._id}}).exec();
-      Verify.findOne({simId: sim.simId}).remove().exec();
+      Verify.findOne({simId: sim.simId}).exec(function(err, verify){
+        verify.remove();
+      });
       sim.verified = false;
       sim.save(function(err){
         if(!err){

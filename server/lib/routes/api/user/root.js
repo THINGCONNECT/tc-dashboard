@@ -14,7 +14,7 @@ router.route('/').get(function(req, res) {
 }).delete(passport.authenticate('local'), function(req, res){
   var user = req.user;
   if(user){
-    user.delete(function(err){
+    user.remove(function(err){
       req.logout();
       res.ok();
     });

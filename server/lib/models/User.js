@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Verify = mongoose.model('Verify');
+var Sim = mongoose.model('Sim');
 // bcrypt
 var bcrypt = require('bcrypt');
 
@@ -12,6 +13,19 @@ var UserSchema = new Schema({
   sims:     [{type: Schema.Types.ObjectId, ref: 'Sim'}],
 }, {collection: 'User'});
 
+// Will not work with query based mongo functions: Users.find().remove()
+// Only doc calls: user.remove();
+UserSchema.pre('remove', function(next) {
+  Sim.find({owner: this._id}, function(err, sims){
+    for(var i in sims){
+      var sim = sims[i];
+      Verify.findOne({simId: sim.simId}).remove().exec();
+      sim.verified = false;
+      sim.save();
+    }
+    next(err);
+  });
+});
 
 ////////////////////////
 // Statics
@@ -55,18 +69,6 @@ UserSchema.methods.validPassword = function(password, callback) {
       callback(true, self);
     }
   });
-};
-
-UserSchema.methods.delete = function(cb) {
-  this.model('Sim').find({owner: this._id}, function(err, sims){
-    for(var i in sims){
-      var sim = sims[i];
-      Verify.findOne({simId: sim.simId}).remove().exec();
-      sim.verified = false;
-      sim.save();
-    }
-  });
-  this.remove(cb);
 };
 
 ////////////////////////
