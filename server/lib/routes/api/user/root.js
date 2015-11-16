@@ -18,6 +18,8 @@ router.route('/').get(function(req, res) {
       req.logout();
       res.ok();
     });
+  }else{
+    res.error(403);
   }
 });
 
