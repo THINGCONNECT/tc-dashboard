@@ -7,7 +7,7 @@ var simHandler = require('lib/simHandler');
 var Sim = mongoose.model('Sim');
 var Verify = mongoose.model('Verify');
 
-
+//This endpoint is for testing purposes
 router.route('/').get(function(req, res) {
   var simId = req.params.sim;
   var payload = req.params.payload;
@@ -15,6 +15,6 @@ router.route('/').get(function(req, res) {
   res.ok(true);
 });
 
-//http://localhost:5000/api/sim/123/payload/*86803%23
+//http://localhost:5000/api/sim/123/*86803%23
 
 module.exports = router;
