@@ -13,10 +13,14 @@ var UserSchema = new Schema({
   sims:     [{type: Schema.Types.ObjectId, ref: 'Sim'}],
 }, {collection: 'User'});
 
+////////////////////////
+// Hooks
+////////////////////////
 // Will not work with query based mongo functions: Users.find().remove()
 // Only doc calls: user.remove();
+// https://github.com/Automattic/mongoose/issues/1241
 UserSchema.pre('remove', function(next) {
-  Sim.find({owner: this._id}, function(err, sims){
+  this.model('Sim').find({owner: this._id}, function(err, sims){
     for(var i in sims){
       var sim = sims[i];
       Verify.findOne({simId: sim.simId}).remove().exec();
