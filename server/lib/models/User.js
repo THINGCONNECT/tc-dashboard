@@ -25,7 +25,7 @@ UserSchema.pre('remove', function(next) {
       var sim = sims[i];
       sim.disown();
     }
-    next(err);
+    if(next) next(err);
   });
 });
 
@@ -65,11 +65,12 @@ UserSchema.statics.createUser = function(username, password, callback) {
 UserSchema.methods.validPassword = function(password, callback) {
   var self = this;
   bcrypt.compare(password, this.password, function(err, res) {
-    if(res) {
-      callback(null, self);
-    } else {
-      callback(true, self);
-    }
+    if(callback)
+      if(res) {
+        callback(null, self);
+      } else {
+        callback(true, self);
+      }
   });
 };
 
