@@ -7,7 +7,7 @@ var VerifySchema = new Schema({
   owner:        {type: Schema.Types.ObjectId, ref: 'User'},
   dateCreated:  {type: Date, default: Date.now},
   verified:     {type: Boolean, default: false},
-  verifyCode:    {type: String},
+  verifyCode:   {type: String},
   //Lock verify if too many verified attempts
 }, {collection: 'Verify', versionKey: false});
 
@@ -31,19 +31,20 @@ VerifySchema.statics.createVerification = function(simId, user, callback) {
             verification.verifyCode = verificationCode;
           }
           verification.save(function(err, res){
-            if(!err){
-              return callback(null, verification);
-            }else{
-              console.log(err);
-              return callback("Something went wrong", null);
-            }
+            if(callback)
+              if(!err){
+                return callback(null, verification);
+              }else{
+                console.log(err);
+                return callback("Something went wrong", null);
+              }
           });
-        }else{
+        }else if(callback) {
           console.log(err);
           return callback("Something went wrong", null);
         }
       });
-    }else{
+    }else if(callback) {
       if(sim && sim.verified){
         callback("This card is already verified", null);
       }else{

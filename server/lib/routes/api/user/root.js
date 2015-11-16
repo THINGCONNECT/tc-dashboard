@@ -11,14 +11,15 @@ router.route('/').get(function(req, res) {
   }else{
     return res.error(500);
   }
-}).delete(function(req, res){
+}).delete(passport.authenticate('local'), function(req, res){
   var user = req.user;
   if(user){
-    console.log("DELETE REQUEST!");
-    console.log(user.delete(function(err){
+    user.remove(function(err){
       req.logout();
       res.ok();
-    }));
+    });
+  }else{
+    res.error(403);
   }
 });
 
