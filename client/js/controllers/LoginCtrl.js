@@ -36,12 +36,4 @@ module.controller('LoginCtrl', function($scope, $state, UserState, $mdDialog) {
       );
     })
   }
-<<<<<<< HEAD
-// D
-// E
-=======
-// A
-// B
-// C
->>>>>>> 189910c9bf9e6a056fe9daa40ab02c9f2cf1b2a6
 });
