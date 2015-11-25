@@ -36,6 +36,7 @@ module.controller('LoginCtrl', function($scope, $state, UserState, $mdDialog) {
       );
     })
   }
-// EXAMPLE CONFLICT 1
-// EXAMPLE CONFLICT 2
+// A
+// B
+// C
 });
