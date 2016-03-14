@@ -8,8 +8,10 @@ div.dashboard-wrapper
         md-list(flex)
       md-list-item.md-2-line(ng-repeat="data in socketData")
         div.md-list-item-text
+          h2
+            | Sim: {{data.simId}}
           h4
-            {{data.simId}}
+            | Payload: {{data.payload}}
           h3
-            {{data.payload}}
+            | {{data.timestamp | date:'medium'}}
         md-divider(ng-if="!$last")

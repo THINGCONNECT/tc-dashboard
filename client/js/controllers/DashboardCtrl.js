@@ -12,6 +12,7 @@ module.controller('DashboardCtrl', function($scope, $state, UserState, Sim, $mdT
   socket.on('incoming', function (data) {
     console.log("INCOMING SIM DATA ", data);
     var message = data.simId + ":" + data.payload
+    data.timestamp = new Date().getTime();
     $scope.socketData.push(data);
 
     $mdToast.show(
