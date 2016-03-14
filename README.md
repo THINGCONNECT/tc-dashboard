@@ -30,3 +30,8 @@ You will need to create a development.json and production.json file in server/li
 To run
 ===========
 `gulp watch`
+
+
+Deploy to staging
+===========
+`make deploy`

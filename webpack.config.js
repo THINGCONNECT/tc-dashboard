@@ -66,6 +66,7 @@ module.exports = {
   externals: {
     angular: 'angular',
     '$': 'jQuery',
+    io: 'io'
   },
 
   plugins: [

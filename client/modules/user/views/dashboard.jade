@@ -3,13 +3,13 @@ include ../partials/sidebar.jade
 div.dashboard-wrapper
   include ../partials/dashboard-header.jade
   div.dashboard-content
-
-    div.featured-widgetsul
-      div(class="widget column-4" ng-repeat="d in UserState.devices")
-        div.widget-inner
-
-          h1 {{d.name}}
-          md-content
-            inject-d(ng-init="payload = d.payload" d="d")
-      
-  
+    div
+      md-content
+        md-list(flex)
+      md-list-item.md-2-line(ng-repeat="data in socketData")
+        div.md-list-item-text
+          h4
+            {{data.simId}}
+          h3
+            {{data.payload}}
+        md-divider(ng-if="!$last")

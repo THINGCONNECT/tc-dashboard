@@ -4,6 +4,22 @@ module.controller('DashboardCtrl', function($scope, $state, UserState, Sim, $mdT
   }).catch(function(){
     $state.go('login');
   });
-  // console.log("Remove User!");
-  // UserState.delete();
+
+
+  var socket = io();
+  // socket.emit('event', {data:"test"});
+  $scope.socketData = [];
+  socket.on('incoming', function (data) {
+    console.log("INCOMING SIM DATA ", data);
+    var message = data.simId + ":" + data.payload
+    $scope.socketData.push(data);
+
+    $mdToast.show(
+      $mdToast.simple()
+      .content(message)
+      .position('top right')
+      .hideDelay(5000)
+    );
+  });
+
 });

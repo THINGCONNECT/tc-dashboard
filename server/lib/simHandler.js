@@ -15,6 +15,8 @@ if(!(nconf.get('AMQP_URL') && nconf.get('AMQP_LOGIN') && nconf.get('AMQP_PASSWOR
   return;
 }
 
+var connectedSockets;
+
 var connection = amqp.createConnection(
   {
     host: nconf.get('AMQP_URL'),
@@ -81,6 +83,20 @@ function activateSim(sim, verification){
 }
 
 function processSimCallback(sim, payload){
+
+  // This could be done better, reduce to O(log n) later
+  for(var k in connectedSockets){
+    if(connectedSockets[k].user._id + "" == sim.owner._id + ""){
+      connectedSockets[k].emit('incoming', {
+        sim: sim._id,
+        simId: sim.simId,
+        payload: payload
+      });
+      // console.log("Incoming SIM message", sim._id, simId, payload);
+    }
+  }
+
+  // connectedSockets
   if(sim.callbackUrl){
     var urlObj = url.parse(sim.callbackUrl);
     var simId = sim.simId;
@@ -154,7 +170,9 @@ function processMessage(simId, payload){
       simId: simId,
       verified: false,
     }
-  }, {upsert: true, new: true}, function (err, sim) {
+  }, {upsert: true, new: true})
+  .populate('owner')
+  .exec(function (err, sim) {
     if(!err && sim)
       processSim(sim, payload);
   });
@@ -171,7 +189,12 @@ function sendMessage(simId, payload, cb){
   }
 }
 
+function setConnectedSockets(sockets){
+  connectedSockets = sockets;
+}
+
 module.exports = {
   processMessage: processMessage,
-  sendMessage: sendMessage
+  sendMessage: sendMessage,
+  setConnectedSockets: setConnectedSockets
 };

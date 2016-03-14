@@ -86,6 +86,9 @@ http.ServerResponse.prototype.error = function(status, message, meta) {
 
 var app = express();
 
+var httpServer = http.Server(app);
+var io = require('socket.io')(httpServer);
+
 if (development) {
 	app.use(morgan('dev'));
 	app.use(errorHandler());
@@ -96,7 +99,17 @@ if (process.env.DEBUG) {
 	app.use(errorHandler());
 }
 
+var sessionStore = new MongoStore({
+    mongooseConnection: mongoose.connection
+  });
+
 // app.set('view engine', 'ejs');
+var sessionMiddleware = session({
+  resave: true,
+  saveUninitialized: true,
+  secret: nconf.get('SESSION_SECRET') || 'yolo secret',
+  store: sessionStore
+});
 
 /** Serve the public static assets before processing anything  */
 app.use('/', serveStatic(__dirname + '/public', {'index': ['index.html']}));
@@ -106,14 +119,7 @@ app.use(favicon(__dirname + '/lib/favicon.ico'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(session({
-	resave: true,
-	saveUninitialized: true,
-	secret: nconf.get('SESSION_SECRET') || 'yolo secret',
-	store: new MongoStore({
-		mongooseConnection: mongoose.connection
-	})
-}));
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -138,11 +144,36 @@ app.use('*', function(req, res) {
   return res.send(theIndex);
 });
 
-var server = app.listen(process.env.PORT || 3000, function() {
+// Socket server
+var connectedSockets = {};
+io.use(function(socket, next){
+  // Wrap the express middleware
+  sessionMiddleware(socket.request, {}, next);
+});
+io.use(require('lib/auth/socket'));
+io.on('connection', function(socket){
+  console.log(socket.user.username + " has connected");
+  connectedSockets[socket.id] = socket;
+  // console.log(socket.user);
+  // socket.emit('protocol', { hello: 'world' });
+
+  // socket.on('test', function(msg){
+  //   console.log('message: ' + msg, arguments);
+  // });
+  socket.on('disconnect', function(){
+    delete connectedSockets[socket.id];
+    console.log(socket.user.username + " has disconnected");
+  });
+});
+
+// require("lib/socket").setSocket(io);
+
+var server = httpServer.listen(process.env.PORT || 3000, function() {
 	var host = server.address().address;
 	var port = server.address().port;
 	console.log('Server listening at http://%s:%s', host, port);
 });
 
 // Run SIM process
-require('lib/simHandler');
+var simHandler = require('lib/simHandler');
+simHandler.setConnectedSockets(connectedSockets);
