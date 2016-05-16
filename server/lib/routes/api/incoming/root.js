@@ -5,12 +5,14 @@ var router = require('express').Router({
 var simHandler = require('lib/simHandler');
 
 router.route('/').post(function(req, res) {
-  var simId = req.params.sim;
+  var simId = req.body.sim;
   var payload = req.body.payload;
+  console.log("Incoming", simId, payload);
   simHandler.processMessage(simId, payload);
   res.ok(true);
 });
 
-//http://localhost:5000/api/sim/SIMID/?apiKey=APIKEYHEREpayload=*86803%23
+//http://localhost:5000/api/incoming/?apiKey=APIKEYHERE
+//post data: sim=123456&payload=*86803%23
 
 module.exports = router;
