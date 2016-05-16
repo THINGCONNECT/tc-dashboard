@@ -51,39 +51,6 @@ function processSimCallback(sim, payload){
       payload: payload
     };
     httpRequest(sim.callbackUrl, 'get', data, cb);
-
-    // var urlObj = url.parse(sim.callbackUrl);
-    // var simId = sim.simId;
-    // var encodedPayload = encodeURIComponent(payload);
-    // var options = {
-    //   host: urlObj.hostname,
-    //   port: urlObj.port,
-    //   path: (urlObj.pathname?urlObj.pathname:"") + "?" + (urlObj.query?urlObj.query + "&":"") + "sim=" + simId + "&payload=" + encodedPayload
-    // };
-    // callback = function(response) {
-    //   var str = '';
-    //   response.on('data', function (chunk) {
-    //     str += chunk;
-    //   });
-    //   response.on('end', function () {
-    //     console.log(str);
-    //   });
-    // }
-    // try{
-    //   if(urlObj.protocol == "https:"){
-    //     https.request(options, callback).on('error',function(e){
-    //      console.log("Error: ", urlObj, options, "\n" + e.message); 
-    //      console.log( e.stack );
-    //    }).end();
-    //   }else if(urlObj.protocol == "http:"){
-    //     http.request(options, callback).on('error',function(e){
-    //      console.log("Error: ", urlObj, options, "\n" + e.message); 
-    //      console.log( e.stack );
-    //    }).end();
-    //   }
-    // }catch(e){
-    //   console.log("Failed to process sim: ", urlObj, options);
-    // }
   }
   console.log("processSimCallback()");
   //http.request(options, callback).end();
@@ -131,6 +98,7 @@ function processMessage(simId, payload){
       processSim(sim, payload);
   });
 }
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 function httpRequest(targetUrl, method, data, cb) {
   try{
@@ -175,12 +143,14 @@ function httpRequest(targetUrl, method, data, cb) {
         });
       }
     }
-    console.log(options);
+
     var req;
 
     if(urlObj.protocol == "https:"){
+      if(options.port == null) options.port = 443;
       req = https.request(options, callback);
     }else if(urlObj.protocol == "http:"){
+      if(options.port == null) options.port = 80;
       req = http.request(options, callback);
     }
 
