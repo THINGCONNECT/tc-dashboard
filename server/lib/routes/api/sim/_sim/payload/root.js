@@ -4,14 +4,13 @@ var router = require('express').Router({
 });
 var simHandler = require('lib/simHandler');
 
-//This endpoint is for testing purposes
-router.route('/').get(function(req, res) {
+router.route('/').post(function(req, res) {
   var simId = req.params.sim;
-  var payload = req.params.payload;
+  var payload = req.body.payload;
   simHandler.processMessage(simId, payload);
   res.ok(true);
 });
 
-//http://localhost:5000/api/sim/123/*86803%23
+//http://localhost:5000/api/sim/SIMID/?apiKey=APIKEYHEREpayload=*86803%23
 
 module.exports = router;

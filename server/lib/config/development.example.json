@@ -1,9 +1,5 @@
 {
-  "AMQP_URL":"",
-  "AMQP_LOGIN":"",
-  "AMQP_PASSWORD":"",
-  "AMQP_VHOST":"",
-  "AMQP_QUEUE_IN":"",
-  "AMQP_QUEUE_OUT":"",
-  "POLL_AMQP":true
+  "OUTGOING_URL":"",
+  "INCOMING_API_KEY":"",
+  "OUTGOING_API_KEY":""
 }

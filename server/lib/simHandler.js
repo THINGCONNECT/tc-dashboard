@@ -7,62 +7,10 @@ var Verify = mongoose.model('Verify');
 var http = require('http');
 var https = require('https');
 var url = require('url');
-
-var amqp = require('amqp');
-
-if(!(nconf.get('AMQP_URL') && nconf.get('AMQP_LOGIN') && nconf.get('AMQP_PASSWORD') && nconf.get('AMQP_VHOST'))){
-  console.log("AMQP Credentials not found");
-  return;
-}
+var querystring = require('querystring');
 
 var connectedSockets;
 
-var connection = amqp.createConnection(
-  {
-    host: nconf.get('AMQP_URL'),
-    //port: 5672,
-    login: nconf.get('AMQP_LOGIN'),
-    password: nconf.get('AMQP_PASSWORD'),
-    vhost: nconf.get('AMQP_VHOST'),
-    // connectionTimeout: 10000,
-    // authMechanism: 'AMQPLAIN',
-    // noDelay: true,
-    // ssl: {
-    //   enabled : false
-    // }
-  }
-);
-if(nconf.get('POLL_AMQP')){
-
-  console.log("Connecting to AMQP");
-
-  connection.on('ready', function () {
-    console.log("Connected ", connection.state);
-    connection.queue(nconf.get('AMQP_QUEUE_IN'), {passive:true, durable: true}, function (q) {
-      console.log("Queue");
-      q.subscribe(function (message, headers, deliveryInfo, messageObject) {
-        // Print messages to stdout
-        // q.bind('#');
-        console.log(message.data.toString());
-        
-        var data = message.data.toString();
-        var dataArr = data.split(",");
-        console.log(dataArr);
-        if(dataArr.length == 5){
-          var simId = dataArr[1].substr(6);
-          var payload = dataArr[4];
-          processMessage(simId, payload);
-        }else{
-          console.log("Malformed Message", data);
-        }
-      });
-    });
-  });
-}else{
-  console.log("AMQP Polling is off");
-}
-
-//http://localhost:5000/api/sim/test/123/*86803%23
 function activateSim(sim, verification){
   //Set ownership of sim
   sim.verified = true;
@@ -98,38 +46,44 @@ function processSimCallback(sim, payload){
 
   // connectedSockets
   if(sim.callbackUrl){
-    var urlObj = url.parse(sim.callbackUrl);
-    var simId = sim.simId;
-    var encodedPayload = encodeURIComponent(payload);
-    var options = {
-      host: urlObj.hostname,
-      port: urlObj.port,
-      path: (urlObj.pathname?urlObj.pathname:"") + "?" + (urlObj.query?urlObj.query + "&":"") + "sim=" + simId + "&payload=" + encodedPayload
+    var data = {
+      sim: simId,
+      payload: payload
     };
-    callback = function(response) {
-      var str = '';
-      response.on('data', function (chunk) {
-        str += chunk;
-      });
-      response.on('end', function () {
-        console.log(str);
-      });
-    }
-    try{
-      if(urlObj.protocol == "https:"){
-        https.request(options, callback).on('error',function(e){
-           console.log("Error: ", urlObj, options, "\n" + e.message); 
-           console.log( e.stack );
-        }).end();
-      }else if(urlObj.protocol == "http:"){
-        http.request(options, callback).on('error',function(e){
-           console.log("Error: ", urlObj, options, "\n" + e.message); 
-           console.log( e.stack );
-        }).end();
-      }
-    }catch(e){
-      console.log("Failed to process sim: ", urlObj, options);
-    }
+    httpRequest(sim.callbackUrl, 'get', data, cb);
+
+    // var urlObj = url.parse(sim.callbackUrl);
+    // var simId = sim.simId;
+    // var encodedPayload = encodeURIComponent(payload);
+    // var options = {
+    //   host: urlObj.hostname,
+    //   port: urlObj.port,
+    //   path: (urlObj.pathname?urlObj.pathname:"") + "?" + (urlObj.query?urlObj.query + "&":"") + "sim=" + simId + "&payload=" + encodedPayload
+    // };
+    // callback = function(response) {
+    //   var str = '';
+    //   response.on('data', function (chunk) {
+    //     str += chunk;
+    //   });
+    //   response.on('end', function () {
+    //     console.log(str);
+    //   });
+    // }
+    // try{
+    //   if(urlObj.protocol == "https:"){
+    //     https.request(options, callback).on('error',function(e){
+    //      console.log("Error: ", urlObj, options, "\n" + e.message); 
+    //      console.log( e.stack );
+    //    }).end();
+    //   }else if(urlObj.protocol == "http:"){
+    //     http.request(options, callback).on('error',function(e){
+    //      console.log("Error: ", urlObj, options, "\n" + e.message); 
+    //      console.log( e.stack );
+    //    }).end();
+    //   }
+    // }catch(e){
+    //   console.log("Failed to process sim: ", urlObj, options);
+    // }
   }
   console.log("processSimCallback()");
   //http.request(options, callback).end();
@@ -178,12 +132,82 @@ function processMessage(simId, payload){
   });
 }
 
+function httpRequest(targetUrl, method, data, cb) {
+  try{
+    var urlObj = url.parse(targetUrl);
+
+    var send_data = querystring.stringify(data);
+    var post = method.toLowerCase() == 'post';
+
+    var options = {
+      host: urlObj.hostname,
+      port: urlObj.port,
+      method: method
+    };
+
+    if(post){
+      options.headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(send_data)
+      }
+      options.path = (urlObj.pathname ? urlObj.pathname : "") + (urlObj.query? "?" + urlObj.query:"");
+    }else{
+      //get
+      var queryString;
+      if(urlObj.query && send_data){
+        queryString = "?" + urlObj.query + "&" + send_data;
+      }else if(send_data){
+        queryString = "?" + send_data;
+      }else if(urlObj.query){
+        queryString = "?" + urlObj.query;
+      }
+      
+      options.path = (urlObj.pathname ? urlObj.pathname : "") + (queryString?queryString:"");
+    }
+
+    var callback = function(response) {
+      if(cb){
+        var str = "";
+        response.on('data', function (chunk) {
+          str += chunk;
+        }).on('end', function () {
+          cb(null, str);
+        });
+      }
+    }
+    console.log(options);
+    var req;
+
+    if(urlObj.protocol == "https:"){
+      req = https.request(options, callback);
+    }else if(urlObj.protocol == "http:"){
+      req = http.request(options, callback);
+    }
+
+    req.on('error', function(err) {
+      console.log("HTTP Request Failed", err);
+      cb(err);
+    });
+    if(post){
+      req.write(send_data);
+    }
+    req.end();
+  }catch(e){
+    console.log(e);
+  }
+}
+
 function sendMessage(simId, payload, cb){
   try{
-    connection.publish(nconf.get('AMQP_QUEUE_OUT'), payload, null, function(err, a){
-      // cant get this to work properly
-    });
-    cb();
+    //Hit TC Middleware
+    var key = nconf.get('OUTGOING_API_KEY');
+    var outgoingUrl = nconf.get('OUTGOING_URL');
+    var data = {
+      apiKey:key,
+      sim: simId,
+      payload: payload
+    };
+    httpRequest(outgoingUrl, 'post', data, cb);
   }catch(e){
     cb(e);
   }

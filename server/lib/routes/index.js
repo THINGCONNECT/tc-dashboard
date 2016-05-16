@@ -15,7 +15,8 @@ function loadRoutes(routes, router, pathAcc, middlewares) {
     for (var path in routes) {
       if (routes.hasOwnProperty(path)) {
         if(path == '_middleware') {
-          dirMiddleware = require('lib/routes' + pathAcc + '/' + path);
+          var dirPath = (pathAcc + '/' + path).replace(":", "_");
+          dirMiddleware = require('lib/routes' + dirPath);
           middlewares.push(dirMiddleware);
           break;
         }
