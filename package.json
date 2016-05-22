@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "bash ./bin/npm-post-install"
+    "install": "bash ./bin/npm-post-install",
+    "start": "gulp watch"
   },
   "engines": {
     "node": "^0.12.7"
