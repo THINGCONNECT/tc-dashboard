@@ -30,7 +30,7 @@ function activateSim(sim, verification){
   verification.save();
 }
 
-function processSimCallback(sim, payload){
+function processSimCallback(sim, payload, cb){
 
   // This could be done better, reduce to O(log n) later
   for(var k in connectedSockets){
@@ -50,20 +50,22 @@ function processSimCallback(sim, payload){
       sim: sim.simId,
       payload: payload
     };
-    httpRequest(sim.callbackUrl, 'get', data);
+    httpRequest(sim.callbackUrl, 'get', data, cb);
+  }else{
+    cb && cb(null, true);
   }
   console.log("processSimCallback()");
   //http.request(options, callback).end();
 }
 
-function processSim(sim, payload){
+function processSim(sim, payload, cb){
   if(sim.locked) return;
 
   console.log("Processing sim ", sim, payload);
   if(sim.verified){
     //Payload logic
     console.log("process payload logic");
-    processSimCallback(sim, payload);
+    processSimCallback(sim, payload, cb);
   }else{
     //Verify logic
     console.log(payload.trim());
@@ -84,7 +86,7 @@ function processSim(sim, payload){
   }
 }
 
-function processMessage(simId, payload){
+function processMessage(simId, payload, cb){
   Sim.findOneAndUpdate({simId: simId}, {
     $setOnInsert: {
       name: simId,
@@ -95,7 +97,7 @@ function processMessage(simId, payload){
   .populate('owner')
   .exec(function (err, sim) {
     if(!err && sim)
-      processSim(sim, payload);
+      processSim(sim, payload, cb);
   });
 }
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
@@ -142,7 +144,7 @@ function httpRequest(targetUrl, method, data, cb) {
         response.on('data', function (chunk) {
           str += chunk;
         }).on('end', function () {
-          cb(null, str);
+          cb(null, str.substr(0, 160));
         });
       }
     }

@@ -8,8 +8,12 @@ router.route('/').post(function(req, res) {
   var simId = req.body.sim;
   var payload = req.body.payload;
   console.log("Incoming", simId, payload);
-  simHandler.processMessage(simId, payload);
-  res.ok(true);
+  simHandler.processMessage(simId, payload, function(err, msg){
+    console.log("msg callback");
+    console.log(err, msg);
+    res.ok(msg);
+  });
+  
 });
 
 //http://localhost:5000/api/incoming/?apiKey=APIKEYHERE
