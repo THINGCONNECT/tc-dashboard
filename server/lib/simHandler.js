@@ -110,14 +110,17 @@ function httpRequest(targetUrl, method, data, cb) {
     var options = {
       host: urlObj.hostname,
       port: urlObj.port,
-      method: method
-    };
-
-    if(post){
-      options.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(send_data)
+      method: method,
+      agent: false,
+      headers: {
+        'Connection': "close"
       }
+    };
+    
+    if(post){
+      options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      options.headers['Content-Length'] = Buffer.byteLength(send_data);
+
       options.path = (urlObj.pathname ? urlObj.pathname : "") + (urlObj.query? "?" + urlObj.query:"");
     }else{
       //get
@@ -154,7 +157,8 @@ function httpRequest(targetUrl, method, data, cb) {
       req = http.request(options, callback);
     }
 
-    console.log("http request ", options);
+    req.setTimeout(5000);
+    req.shouldKeepAlive = false;
 
     req.on('error', function(err) {
       console.log("HTTP Request Failed", err);
@@ -163,6 +167,7 @@ function httpRequest(targetUrl, method, data, cb) {
     if(post){
       req.write(send_data);
     }
+
     req.end();
   }catch(e){
     console.log(e);
