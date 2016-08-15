@@ -47,10 +47,10 @@ function processSimCallback(sim, payload){
   // connectedSockets
   if(sim.callbackUrl){
     var data = {
-      sim: simId,
+      sim: sim.simId,
       payload: payload
     };
-    httpRequest(sim.callbackUrl, 'get', data, cb);
+    httpRequest(sim.callbackUrl, 'get', data);
   }
   console.log("processSimCallback()");
   //http.request(options, callback).end();
@@ -154,9 +154,11 @@ function httpRequest(targetUrl, method, data, cb) {
       req = http.request(options, callback);
     }
 
+    console.log("http request ", options);
+
     req.on('error', function(err) {
       console.log("HTTP Request Failed", err);
-      cb(err);
+      cb && cb(err);
     });
     if(post){
       req.write(send_data);
