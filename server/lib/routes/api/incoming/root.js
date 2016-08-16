@@ -9,9 +9,13 @@ router.route('/').post(function(req, res) {
   var payload = req.body.payload;
   console.log("Incoming", simId, payload);
   simHandler.processMessage(simId, payload, function(err, msg){
-    console.log("msg callback");
-    console.log(err, msg);
-    res.ok(msg);
+    // console.log("msg callback");
+    // console.log(err, msg);
+    if(err){
+      res.ok("Error in callback");
+    }else{
+      res.ok(msg);
+    }
   });
   
 });
