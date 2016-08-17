@@ -115,8 +115,14 @@ function httpRequest(targetUrl, method, data, cb) {
   try{
     var urlObj = url.parse(targetUrl);
 
-    var send_data = querystring.stringify(data);
     var post = method.toLowerCase() == 'post';
+
+    var send_data;
+    if(post){
+      send_data = JSON.stringify(data);
+    }else{
+      send_data = querystring.stringify(data);
+    }
 
     var options = {
       host: urlObj.hostname,
@@ -129,7 +135,8 @@ function httpRequest(targetUrl, method, data, cb) {
     };
     
     if(post){
-      options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      // options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      options.headers['Content-Type'] = 'application/json';
       options.headers['Content-Length'] = Buffer.byteLength(send_data);
 
       options.path = (urlObj.pathname ? urlObj.pathname : "") + (urlObj.query? "?" + urlObj.query:"");
