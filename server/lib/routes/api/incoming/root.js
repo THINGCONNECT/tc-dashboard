@@ -12,7 +12,7 @@ router.route('/').post(function(req, res) {
     // console.log("msg callback");
     // console.log(err, msg);
     if(err){
-      res.ok("Error in callback");
+      res.ok("Error! " + err);
     }else{
       res.ok(msg);
     }

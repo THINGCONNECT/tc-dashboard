@@ -52,7 +52,7 @@ function processSimCallback(sim, payload, cb){
     };
     httpRequest(sim.callbackUrl, 'get', data, cb);
   }else{
-    cb && cb(null, true);
+    cb && cb(null, "Good");
   }
   console.log("processSimCallback()");
   //http.request(options, callback).end();
