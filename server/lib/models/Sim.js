@@ -6,6 +6,7 @@ var SimSchema = new Schema({
   name:         {type: String, required: true},
   simId:        {type: String, required: true, unique: true},
   callbackUrl:  {type: String},
+  callbackType: {type: String},
 
   owner:        {type: Schema.Types.ObjectId, ref: 'User'},
   dateCreated:  {type: Date, default: Date.now},

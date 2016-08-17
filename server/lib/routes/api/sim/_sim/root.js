@@ -25,10 +25,12 @@ router.route('/').get(function(req, res) {
   var user = req.user;
   var name = body.name;
   var callbackUrl = body.callbackUrl;
+  var callbackType = body.callbackType;
   Sim.findOne({simId: simId, owner:user, verified: true}, function(err, sim) {
     if(!err && sim){
       sim.name = name;
       sim.callbackUrl = callbackUrl;
+      sim.callbackType = callbackType;
       sim.save(function(err){
         if(!err){
           return res.ok(true);

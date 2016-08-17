@@ -50,7 +50,8 @@ function processSimCallback(sim, payload, cb){
       sim: sim.simId,
       payload: payload
     };
-    httpRequest(sim.callbackUrl, 'get', data, cb);
+    var requestType = sim.callbackType == "post"?"post":"get";
+    httpRequest(sim.callbackUrl, requestType, data, cb);
   }else{
     cb && cb(null, "Good");
   }
