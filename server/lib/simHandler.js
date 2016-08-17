@@ -59,7 +59,10 @@ function processSimCallback(sim, payload, cb){
 }
 
 function processSim(sim, payload, cb){
-  if(sim.locked) return;
+  if(sim.locked) {
+    cb && cb("This sim is locked");
+    return;
+  }
 
   console.log("Processing sim ", sim, payload);
   if(sim.verified){
@@ -75,12 +78,15 @@ function processSim(sim, payload, cb){
           //Activate sim card
           activateSim(sim, verification);
           console.log("Activate sim card");
+          cb && cb(null, "This sim is activated");
         }else{
           console.log("verification failed");
+          cb && cb("Verification failed.");
         }
       }else{
         //No verification created yet
         console.log("Verification failed");
+        cb && cb("Verification failed");
       }
     });
   }
@@ -98,6 +104,8 @@ function processMessage(simId, payload, cb){
   .exec(function (err, sim) {
     if(!err && sim)
       processSim(sim, payload, cb);
+    else
+      cb && cb("Error 1");
   });
 }
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
