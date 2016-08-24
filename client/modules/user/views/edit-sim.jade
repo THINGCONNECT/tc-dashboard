@@ -52,8 +52,8 @@ div.dashboard-wrapper
                     }
           div.test-buttons
             input(type="text" ng-model="payload" maxlength="160" placeholder="Payload")
-            md-button.btn.btn-yellow(ng-click="testCallbackURL()" ) Test Callback URL
-            md-button.btn.btn-yellow(ng-click="testSendSim()" ) Send To Sim
+            md-button.btn.btn-yellow(ng-click="testCallbackURL()" ng-disabled="testDiabled") Test Callback URL
+            md-button.btn.btn-yellow(ng-click="testSendSim()" ng-disabled="testDiabled") Send To Sim
           
           input(type="submit" class="btn btn-purple" value="Save")
           a(class="btn block btn-small btn-remove" ng-click="removeSim($event)") Remove Sim
