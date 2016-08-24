@@ -33,9 +33,10 @@ $btn-colors: (
   font-family:$open-sans;
   text-decoration: none;
   border-radius:0px;
-  border:2px solid transprent;
+  // border:2px solid transprent;
   text-align: center;
   cursor:pointer;
+  border:none;
   @include transition-all(0.5s);
   &:hover {
     cursor:pointer;

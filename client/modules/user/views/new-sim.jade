@@ -4,8 +4,10 @@ div.dashboard-wrapper
   include ../partials/dashboard-header.jade
   div.dashboard-content
     div(ng-hide='hideForm')
-      h1 Connect new sim
-      input(type="text" placeholder="Sim Number" ng-model="sim.simId")
-      input(type="submit" ng-click="verifySim($event)" class="btn btn-purple" value="Connect")
+      div.device-form
+        div.device-inner
+          h1 Connect new sim
+          input(type="text" placeholder="Sim Number" ng-model="sim.simId")
+          input(type="submit" ng-click="verifySim($event)" class="btn btn-purple" value="Connect")
     div(ng-show='hideForm')
       | Please send {{verifyCode}} using your SIM card
