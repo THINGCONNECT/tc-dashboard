@@ -2,17 +2,18 @@ div.sidebar
   ul
     li
       h2
-        a(ui-sref="dashboard")
-          my sim cards
-        a(ui-sref="new-sim" class="add")
-          i(class="fa fa-plus-square") &nbsp; add
+        a(ui-sref="dashboard") Dashboard
       ul
         li(ng-repeat="sim in UserState.sims")
           a(ui-sref="edit-sim({id: sim.simId})")
-           i(class="fa fa-phone-square")
+            i(class="fa fa-phone-square")
             | &nbsp; {{sim.name}} ({{sim.simId}})
+        li
+          a(ui-sref="new-sim" class="add")
+            i(class="fa fa-plus-square")
+            | &nbsp;  Add new Sim
 
     li.separate
       a(href="#" ui-sref="login" ng-click="UserState.logout()")
         i(class="fa fa-sign-out")
-         | &nbsp; logout
+        | &nbsp; Log Out

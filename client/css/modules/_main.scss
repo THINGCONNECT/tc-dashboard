@@ -512,6 +512,7 @@ p.info {
   font-family:$lato;
   @extend %list-reset;
   a {
+    color:$var-white;
     @include transition-all(0.5s);
     font-size:17px;
     &:hover {
