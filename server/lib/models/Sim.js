@@ -43,9 +43,10 @@ SimSchema.methods.verify = function(str, cb) {
 };
 
 SimSchema.methods.disown = function(cb){
-  this.model('User').findByIdAndUpdate(this.owner._id, {$pull: {sims: this._id}}).exec();
+  this.model('User').findByIdAndUpdate(this.owner, {$pull: {sims: this._id }}).exec();
   this.model('Verify').findOne({simId: this.simId}).exec(function(err, verify){
-   verify.remove();
+    if(verify)
+      verify.remove();
   });
   this.verified = false;
   this.save(function(err){
