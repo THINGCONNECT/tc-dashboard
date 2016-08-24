@@ -30,7 +30,7 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
     $scope.sendToSim = function(){
       sim.sendToSim("test");
     }
-    
+
   }).catch(function(){
     $state.go('login');
   });

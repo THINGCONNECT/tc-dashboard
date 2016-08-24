@@ -12,13 +12,44 @@ div.dashboard-wrapper
           input(type="text" placeholder="My Sim" ng-model="sim.name")
           label SIM ID
           input(type="text" disabled ng-model="sim.simId")
-          label Callback Payload URL
+          label Payload Callback URL
           input(type="text" placeholder="Read Payload URL" ng-model="sim.callbackUrl")
           select(ng-model="sim.callbackType")
             option(value="get") GET
             option(value="post") POST
             option(value="ifttt") IFTTT Maker Request
 
+          div.info
+            div(ng-if="sim.callbackType == 'get'")
+              p Request Type: GET
+              p Request URL: {{sim.callbackUrl}}?sim={{sim.simId}}&amp;payload=Example%20Payload
+            div(ng-if="sim.callbackType == 'post'") 
+              p Request Type: 
+                span POST
+              p Request URL: {{sim.callbackUrl}}
+              p Post Type: JSON
+              div.codeblock
+                pre(class="prettyprint")
+                  code(class="language-js").
+                    { 
+                      sim : &#39;{{sim.simId}}&#39;;
+                      payload: &#39;Example Payload&#39;;
+                    }
+            div(ng-if="sim.callbackType == 'ifttt'") 
+              p IFTTT Maker Request
+              p More information at 
+              a(href="https://maker.ifttt.com/use/REPLACE_ME" target="_blank") IFTTT Maker
+              p Request Type: 
+                span POST
+              p Request URL: {{sim.callbackUrl}}
+              p Post Type: JSON
+              div.codeblock
+                pre(class="prettyprint")
+                  code(class="language-js").
+                    { 
+                      value1 : &#39;{{sim.simId}}&#39;;
+                      value2: &#39;Example Payload&#39;;
+                    }
           div.test-buttons
             input(type="button" ng-click="testCallbackURL()" class="btn btn-yellow" value="Test Callback URL")
             input(type="button" ng-click="testSendSim()" class="btn btn-yellow" value="Send To Sim")

@@ -665,6 +665,17 @@ quote {
   }
 }
 
+.info {
+  text-align: left;
+  background:$light-grey;
+  margin:1em;
+  padding:2em;
+}
+.codeblock {
+  padding-top:1em;
+  width: auto;
+}
+
 .content {
   z-index:-1;
   margin-top:130px;
