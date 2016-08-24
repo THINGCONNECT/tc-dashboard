@@ -30,7 +30,7 @@ function activateSim(sim, verification){
   verification.save();
 }
 
-function processSimCallback(sim, payload, cb){
+function callSim(sim, payload, cb, requestType, callbackUrl){
 
   // This could be done better, reduce to O(log n) later
   for(var k in connectedSockets){
@@ -40,23 +40,28 @@ function processSimCallback(sim, payload, cb){
         simId: sim.simId,
         payload: payload
       });
-      // console.log("Incoming SIM message", sim._id, simId, payload);
     }
   }
 
   // connectedSockets
-  if(sim.callbackUrl){
+  callbackUrl = callbackUrl || sim.callbackUrl;
+  requestType = requestType || sim.callbackType || "get";
+
+  if(callbackUrl && (requestType == "post" || requestType == "get")){
     var data = {
       sim: sim.simId,
       payload: payload
     };
-    var requestType = sim.callbackType == "post"?"post":"get";
-    httpRequest(sim.callbackUrl, requestType, data, cb);
+
+    httpRequest(callbackUrl, requestType, data, cb);
   }else{
     cb && cb(null, "Good");
   }
   console.log("processSimCallback()");
-  //http.request(options, callback).end();
+}
+
+function processSimCallback(sim, payload, cb){
+  callSim(sim, payload, cb, null, null);
 }
 
 function processSim(sim, payload, cb){
@@ -215,5 +220,6 @@ function setConnectedSockets(sockets){
 module.exports = {
   processMessage: processMessage,
   sendMessage: sendMessage,
-  setConnectedSockets: setConnectedSockets
+  setConnectedSockets: setConnectedSockets,
+  callSim: callSim
 };

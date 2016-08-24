@@ -20,7 +20,7 @@ router.route('/').post(function(req, res) {
   
 });
 
-//http://localhost:5000/api/incoming/?apiKey=APIKEYHERE
-//post data: sim=123456&payload=*86803%23
+// http://localhost:5000/api/incoming/?apiKey=APIKEYHERE
+// post data: sim=123456&payload=*86803%23
 
 module.exports = router;

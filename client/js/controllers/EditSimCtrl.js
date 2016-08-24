@@ -19,6 +19,17 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
       //Revert changes
       UserState.loadSims();
     });
+
+    $scope.testCallbackURL = function(){
+      sim.sendToCallbackURL(sim.callbackType, sim.callbackUrl, "test");
+    }
+    $scope.testSendSim = function(){
+      sim.sendToSim("test");
+    }
+
+    $scope.sendToSim = function(){
+      sim.sendToSim("test");
+    }
     
   }).catch(function(){
     $state.go('login');

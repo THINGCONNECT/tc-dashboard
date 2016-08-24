@@ -35,6 +35,25 @@ module.service('Sim', function($http, $q, $compile, $sce) {
       });
     };
 
+    prototype.sendToCallbackURL = function(requestType, url, msg){
+      var data = {
+        requestType: requestType,
+        url: url,
+        payload: msg
+      };
+      return $http.post(baseUrl + '/' + this.simId + '/callback', data).then(function(data) {
+        console.log(data.data);
+        return data.data;
+      });
+    }
+
+    prototype.sendToSim = function(msg){
+      return $http.post(baseUrl + '/' + this.simId + '/send', {payload: msg}).then(function(data) {
+        console.log(data.data);
+        return data.data;
+      });
+    }
+
     prototype.save = function() {
       return $http.post(baseUrl + '/' + this.simId, this).then(function(data) {
         return data.data;
