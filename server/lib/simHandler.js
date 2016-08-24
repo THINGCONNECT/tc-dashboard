@@ -15,6 +15,11 @@ function activateSim(sim, verification){
   //Set ownership of sim
   sim.verified = true;
   sim.owner = verification.owner;
+
+  //Clear old data
+  sim.callbackUrl = null;
+  sim.callbackType = null;
+
   sim.save(function(err){
     if(!err){
       User.findByIdAndUpdate(verification.owner, {$push: {sims: sim}}, function(err, user) {
