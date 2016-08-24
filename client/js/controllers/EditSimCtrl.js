@@ -1,5 +1,5 @@
 var module = require('./module');
-module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, $mdToast, $animate) {
+module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, $mdToast, $animate, $timeout) {
   UserState.loggedIn().then(function(user){
     var simId = $state.params.id;
     var sim = UserState.simId[simId];
@@ -30,6 +30,12 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
     $scope.sendToSim = function(){
       sim.sendToSim("test");
     }
+
+    $scope.$watch('sim.callbackType', function(){
+      $timeout(function(){
+        PR && PR.prettyPrint();
+      });
+    });
 
   }).catch(function(){
     $state.go('login');
