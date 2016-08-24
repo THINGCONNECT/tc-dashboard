@@ -32,8 +32,8 @@ div.dashboard-wrapper
                 pre(class="prettyprint")
                   code(class="language-js").
                     { 
-                      sim : &#39;{{sim.simId}}&#39;;
-                      payload: &#39;Example Payload&#39;;
+                      sim : &#39;{{sim.simId}}&#39;,
+                      payload: &#39;Example Payload&#39;
                     }
             div(ng-if="sim.callbackType == 'ifttt'") 
               p IFTTT Maker Request
@@ -47,8 +47,8 @@ div.dashboard-wrapper
                 pre(class="prettyprint")
                   code(class="language-js").
                     { 
-                      value1 : &#39;{{sim.simId}}&#39;;
-                      value2: &#39;Example Payload&#39;;
+                      value1 : &#39;{{sim.simId}}&#39;,
+                      value2: &#39;Example Payload&#39;
                     }
           div.test-buttons
             input(type="button" ng-click="testCallbackURL()" class="btn btn-yellow" value="Test Callback URL")
