@@ -51,7 +51,7 @@ div.dashboard-wrapper
                       value2: &#39;Example Payload&#39;
                     }
           div.test-buttons
-            input(type="text" ng-model="payload" placeholder="Payload")
+            input(type="text" ng-model="payload" maxlength="160" placeholder="Payload")
             md-button.btn.btn-yellow(ng-click="testCallbackURL()" ) Test Callback URL
             md-button.btn.btn-yellow(ng-click="testSendSim()" ) Send To Sim
           
