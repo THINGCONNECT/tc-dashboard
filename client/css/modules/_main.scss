@@ -252,6 +252,9 @@ p.info {
       border:1px solid $var-purple;
       padding: 1em;
       margin: 1em;
+      .btn {
+        margin: 1em;
+      }
     }
   }
   h1 {
