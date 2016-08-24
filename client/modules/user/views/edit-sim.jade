@@ -17,6 +17,7 @@ div.dashboard-wrapper
           select(ng-model="sim.callbackType")
             option(value="get") GET
             option(value="post") POST
+            option(value="ifttt") IFTTT Maker Request
 
           input(type="button" ng-click="testCallbackURL()" class="btn btn-purple" value="Test Callback URL")
           input(type="button" ng-click="testSendSim()" class="btn btn-purple" value="Send To Sim")

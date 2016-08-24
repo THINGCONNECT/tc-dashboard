@@ -47,13 +47,22 @@ function callSim(sim, payload, cb, requestType, callbackUrl){
   callbackUrl = callbackUrl || sim.callbackUrl;
   requestType = requestType || sim.callbackType || "get";
 
-  if(callbackUrl && (requestType == "post" || requestType == "get")){
-    var data = {
-      sim: sim.simId,
-      payload: payload
-    };
-
-    httpRequest(callbackUrl, requestType, data, cb);
+  if(callbackUrl){
+    var data;
+    if(requestType == "post" || requestType == "get"){
+      data = {
+        sim: sim.simId,
+        payload: payload
+      }
+    }else if(requestType == "ifttt"){
+      requestType = 'post';
+      data = {
+        value1: sim.simId,
+        value2: payload
+      }
+    }
+    if(data)
+      httpRequest(callbackUrl, requestType, data, cb);
   }else{
     cb && cb(null, "Good");
   }
