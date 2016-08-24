@@ -4,6 +4,8 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
     var simId = $state.params.id;
     var sim = UserState.simId[simId];
     $scope.sim = sim;
+    $scope.payload = "Example Payload";
+
     $scope.updateSim = function(ev) {
       sim.save().then(function(){
         UserState.loadSims();
@@ -21,14 +23,11 @@ module.controller('EditSimCtrl', function($scope, $state, UserState, $mdDialog, 
     });
 
     $scope.testCallbackURL = function(){
-      sim.sendToCallbackURL(sim.callbackType, sim.callbackUrl, "test");
-    }
-    $scope.testSendSim = function(){
-      sim.sendToSim("test");
+      sim.sendToCallbackURL(sim.callbackType, sim.callbackUrl, $scope.payload);
     }
 
-    $scope.sendToSim = function(){
-      sim.sendToSim("test");
+    $scope.testSendSim = function(){
+      sim.sendToSim($scope.payload);
     }
 
     $scope.$watch('sim.callbackType', function(){
